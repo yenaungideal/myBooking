@@ -12,3 +12,5 @@ import { MatButton } from '@angular/material/button';
 export class AppComponent {
   title = 'myApp';
 }
+
+// Testing.
