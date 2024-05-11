@@ -4,18 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <span class="text-3xl text-purple-600 font-bold">Hello Tailwind!</span>
-    <div class="example-button-row">
-      <button mat-raised-button>Basic</button>
-      <button mat-raised-button color="primary">Primary</button>
-      <button mat-raised-button color="accent">Accent</button>
-      <button mat-raised-button color="warn">Warn</button>
-      <button mat-raised-button disabled>Disabled</button>
-      <button mat-flat-button color="primary">yn</button>
-      <a mat-raised-button routerLink=".">Link</a>
-    </div>
-    <router-outlet />
+    <nav>
+      <ul>
+        <li>
+          <a class="text-blue-500 hover:text-blue-700" href="/home">Home</a>
+        </li>
+        <li>
+          <a class="text-blue-500 hover:text-blue-700" href="/dashboard"
+            >Dashboard</a
+          >
+        </li>
+        <li>
+          <a class="text-blue-500 hover:text-blue-700" href="/login">Login</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Router outlet where components will be rendered -->
+    <router-outlet></router-outlet>
   </body>
 </html>
