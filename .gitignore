@@ -12,7 +12,7 @@ npm-debug.log
 yarn-error.log
 
 #angular_cache
-.angular
+.angular_cache
 
 # IDEs and editors
 .idea/
