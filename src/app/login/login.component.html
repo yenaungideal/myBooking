@@ -28,14 +28,32 @@
     </style>
   </head>
   <body>
-    <div class="main-content">
-      <div class="dashboard-header">
-        <h1>Login</h1>
-      </div>
-      <div class="dashboard-content">
-        <h2>Welcome to your Login</h2>
-        <p>This is a sample Login layout.</p>
-      </div>
-    </div>
+    <form [formGroup]="loginForm">
+      <mat-form-field class="w-[200px]">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          matInput
+          formControlName="userEmail"
+          placeholder="Ex. pat@example.com"
+        />
+        @if (loginForm.controls['userEmail'].hasError('email') &&
+        !loginForm.controls['userEmail'].hasError('required')) {
+        <mat-error>Please enter a valid email address</mat-error>
+        } @if (loginForm.controls['userEmail'].hasError('required')) {
+        <mat-error>Email is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="w-[200px]">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput formControlName="password" />
+        @if (loginForm.controls['password'].hasError('password') &&
+        !loginForm.controls['password'].hasError('required')) {
+        <mat-error>Please enter a valid password</mat-error>
+        } @if (loginForm.controls['password'].hasError('required')) {
+        <mat-error>Password is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </form>
   </body>
 </html>
