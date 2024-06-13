@@ -1,25 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   ActivatedRoute,
-  ActivationEnd,
-  ActivationStart,
-  ChildActivationEnd,
-  ChildActivationStart,
   Event,
-  GuardsCheckEnd,
-  GuardsCheckStart,
-  NavigationCancel,
   NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  ResolveEnd,
-  ResolveStart,
-  RouteConfigLoadEnd,
-  RouteConfigLoadStart,
   Router,
   RouterOutlet,
-  RoutesRecognized,
-  Scroll,
 } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
