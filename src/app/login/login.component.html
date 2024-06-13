@@ -1,35 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Sample</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-      }
-
-      .sidebar-item {
-        padding: 10px 20px;
-        cursor: pointer;
-      }
-
-      .dashboard-header {
-        background-color: #e8df97;
-        color: #fff;
-        padding: 20px;
-      }
-
-      .dashboard-content {
-        padding: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <form [formGroup]="loginForm">
-      <mat-form-field class="w-[200px]">
+<div
+  class="min-h-screen flex items-center justify-center bg-gray-100 login-background-image"
+>
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="w-full">
         <mat-label>Email</mat-label>
         <input
           type="email"
@@ -41,19 +16,20 @@
         !loginForm.controls['userEmail'].hasError('required')) {
         <mat-error>Please enter a valid email address</mat-error>
         } @if (loginForm.controls['userEmail'].hasError('required')) {
-        <mat-error>Email is <strong>required</strong></mat-error>
+        <mat-error>Email is required</mat-error>
         }
       </mat-form-field>
-      <mat-form-field class="w-[200px]">
+      <mat-form-field class="w-full">
         <mat-label>Password</mat-label>
         <input type="password" matInput formControlName="password" />
         @if (loginForm.controls['password'].hasError('password') &&
         !loginForm.controls['password'].hasError('required')) {
         <mat-error>Please enter a valid password</mat-error>
         } @if (loginForm.controls['password'].hasError('required')) {
-        <mat-error>Password is <strong>required</strong></mat-error>
+        <mat-error>Password is required</mat-error>
         }
       </mat-form-field>
+      <button mat-flat-button color="accent" class="w-full">Login</button>
     </form>
-  </body>
-</html>
+  </div>
+</div>

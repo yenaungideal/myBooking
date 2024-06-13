@@ -10,23 +10,9 @@
     />
   </head>
   <body>
-    <span class="text-3xl text-purple-600 font-bold">Hello Tailwind!</span>
-    <nav>
-      <ul>
-        <li>
-          <a class="text-blue-500 hover:text-blue-700" href="/home">Home</a>
-        </li>
-        <li>
-          <a class="text-blue-500 hover:text-blue-700" href="/dashboard"
-            >Dashboard</a
-          >
-        </li>
-        <li>
-          <a class="text-blue-500 hover:text-blue-700" href="/login">Login</a>
-        </li>
-      </ul>
-    </nav>
-    <!-- Router outlet where components will be rendered -->
+    @if(isShowNavBar){
+    <app-nav-bar (onRouteChanged)="onRouteChanged($event)"></app-nav-bar>
+    }
     <router-outlet></router-outlet>
   </body>
 </html>
