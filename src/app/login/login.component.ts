@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import {SkipNonPrintableCharactersDirective,SkipWhitespaceDirective} from '../../libs/directives'
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -19,6 +20,8 @@ import { Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    SkipNonPrintableCharactersDirective,
+    SkipWhitespaceDirective
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
