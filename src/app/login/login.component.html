@@ -21,7 +21,7 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Password</mat-label>
-        <input type="password" matInput formControlName="password" />
+        <input type="password" matInput formControlName="password" [skipNonPrintableCharacters]="false" [skipWhitespace]="false" />
         @if (loginForm.controls['password'].hasError('password') &&
         !loginForm.controls['password'].hasError('required')) {
         <mat-error>Please enter a valid password</mat-error>
