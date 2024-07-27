@@ -21,7 +21,13 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Password</mat-label>
-        <input type="password" matInput formControlName="password" [skipNonPrintableCharacters]="false" [skipWhitespace]="false" />
+        <input
+          type="password"
+          matInput
+          formControlName="password"
+          [skipNonPrintableCharacters]="false"
+          [skipWhitespace]="false"
+        />
         @if (loginForm.controls['password'].hasError('password') &&
         !loginForm.controls['password'].hasError('required')) {
         <mat-error>Please enter a valid password</mat-error>
@@ -31,5 +37,24 @@
       </mat-form-field>
       <button mat-flat-button color="accent" class="w-full">Login</button>
     </form>
+    <div class="w-full pt-2.5">
+      <span
+        class="cursor-pointer text-red-500 mr-1 px-1 py-1"
+        [ngClass]="{
+          'border-solid border-2 border-gray-400 rounded':
+            defaultLanguage() === 'en'
+        }"
+        (click)="setDefaultLanguage('en')"
+        >English</span
+      >/<span
+        class="cursor-pointer text-blue-500 ml-1 px-1 py-1"
+        [ngClass]="{
+          'border-solid border-2 border-gray-400 rounded':
+            defaultLanguage() === 'xh'
+        }"
+        (click)="setDefaultLanguage('xh')"
+        >Chinese</span
+      >
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -10,24 +10,31 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import {SkipNonPrintableCharactersDirective,SkipWhitespaceDirective} from '../../libs/directives'
+import {
+  SkipNonPrintableCharactersDirective,
+  SkipWhitespaceDirective,
+} from '../../libs/directives';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     FormsModule,
+    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     SkipNonPrintableCharactersDirective,
-    SkipWhitespaceDirective
+    SkipWhitespaceDirective,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  loginForm: FormGroup;
+  public loginForm: FormGroup;
+  public defaultLanguage = signal<'en' | 'xh'>('en');
+  // 'en' | 'xh' = 'en'; // Need to create lang interface.
   constructor(private router: Router) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
@@ -43,5 +50,9 @@ export class LoginComponent {
       console.log('Password:', password);
       this.router.navigate(['dashboard']);
     }
+  }
+
+  public setDefaultLanguage(lang: 'en' | 'xh'): void {
+    this.defaultLanguage.set(lang);
   }
 }
