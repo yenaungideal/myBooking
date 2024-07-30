@@ -1,5 +1,7 @@
-import {Env} from './environment.interface';
+import { Env } from './environment.interface';
 
-export const prodEnvironment : Env = {
-    API_URL: 'https://www.google.com.sg/'
+export const environment: Env = {
+  PRODUCTION: true,
+  API_URL: 'https://www.google.com.sg/',
+  ASSET_PATH: '/assets',
 };

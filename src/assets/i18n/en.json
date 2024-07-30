@@ -1,0 +1,10 @@
+{
+  "trxLogin.lang.english": "English",
+  "trxLogin.lang.chinese": "Chinese",
+  "trxLogin.email": "Email",
+  "trxLogin.email.validator.required": "Email is required",
+  "trxLogin.email.validator.invalid": "Please enter a valid email address",
+  "trxLogin.password": "Password",
+  "trxLogin.password.validator.required": "Email is required",
+  "trxLogin.password.validator.invalid": "Please enter a valid password"
+}

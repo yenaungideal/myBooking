@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -15,6 +15,13 @@ import {
   SkipWhitespaceDirective,
 } from '../../libs/directives';
 import { CommonModule } from '@angular/common';
+import { Env } from '../../environments';
+import {
+  TRANSL_LANGS,
+  TranslatePipe,
+  TranslateService,
+} from '../../libs/translation';
+import { TranslocoService } from '@ngneat/transloco';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -27,19 +34,28 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     SkipNonPrintableCharactersDirective,
     SkipWhitespaceDirective,
+    TranslatePipe,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
-  public defaultLanguage = signal<'en' | 'xh'>('en');
+  public defaultLanguage = signal<'en' | 'zh'>('en');
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
-  constructor(private router: Router) {
+  constructor(
+    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env,
+    private router: Router,
+    private translocoService: TranslocoService
+  ) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
+  }
+
+  public ngOnInit(): void {
+    this.setDefaultLanguage('zh');
   }
 
   public onSubmit() {
@@ -52,7 +68,13 @@ export class LoginComponent {
     }
   }
 
-  public setDefaultLanguage(lang: 'en' | 'xh'): void {
-    this.defaultLanguage.set(lang);
+  public setDefaultLanguage(lang: 'en' | 'zh'): void {
+    if (TRANSL_LANGS.includes(lang)) {
+      this.translocoService.setActiveLang(lang);
+      this.defaultLanguage.set(lang);
+    } else {
+      this.translocoService.setActiveLang('en');
+      this.defaultLanguage.set('en');
+    }
   }
 }
