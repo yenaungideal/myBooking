@@ -1,3 +1,5 @@
-export interface Env{
-    API_URL:string;
+export interface Env {
+  PRODUCTION: boolean;
+  API_URL: string;
+  ASSET_PATH: string;
 }
