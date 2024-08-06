@@ -1,0 +1,10 @@
+{
+    "name":"Elbes",
+    "roles":["admin","marketingUser"],
+    "address":{
+        "unit":"#04-122",
+        "street":"Jalan Batu",
+        "postalCode":"431004",
+        "country":"Singapore"
+    }
+}
