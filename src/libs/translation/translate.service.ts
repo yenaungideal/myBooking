@@ -16,6 +16,12 @@ export class TranslateService {
   private _service = inject(TranslocoService);
   private _translationloader = inject(TranslocoHttpLoader);
 
+  /* Usage as below ...
+    const streamingCount = 100; 
+    this.traslateService.instant('streaming.message',{streamingCount});
+    Streaming Message Declaration as below ...
+    'streaming.message' : 'Enabled Streaming , total streaming count {{streamingCount}}'
+  */
   public instant(
     key: string,
     params?: HashMap | undefined,
