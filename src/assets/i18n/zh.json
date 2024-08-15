@@ -6,5 +6,9 @@
   "trxLogin.email.validator.invalid": "请输入有效的电子邮件地址",
   "trxLogin.password": "密码",
   "trxLogin.password.validator.required": "密码是必需的",
-  "trxLogin.password.validator.invalid": "请输入有效密码"
+  "trxLogin.password.validator.invalid": "请输入有效密码",
+  "trxMenu.dashboard":"仪表板",
+  "trxMenu.booking":"预订",
+  "trxMenu.profile":"轮廓",
+  "trxMenu.logout":"登出"
 }

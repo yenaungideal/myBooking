@@ -33,10 +33,6 @@ export class AppComponent implements OnDestroy {
     });
   }
 
-  public onRouteChanged(routePath: string) {
-    this.router.navigate([routePath]);
-  }
-
   ngOnDestroy(): void {
     // Emit a value and complete the observable to clean up subscriptions
     this.destroy$.next();
