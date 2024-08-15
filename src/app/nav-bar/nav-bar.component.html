@@ -64,24 +64,18 @@
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
-            <div
-              class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white cursor-pointer"
-              (click)="onMenuClick('/dashboard')"
-            >
-              Dashboard
-            </div>
-            <div
-              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-              (click)="onMenuClick('/booking')"
-            >
-              Booking
-            </div>
-            <div
-              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-              (click)="onMenuClick('/profile')"
-            >
-              Profile
-            </div>
+            @for (menu of navMenu; track $index) {
+              @if(menu.enabled){
+                <div
+                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
+                routerLinkActive="bg-gray-900"
+                [routerLink]="menu.route"
+              >
+                {{menu.trxMenulabel | trx }}
+              </div>
+              }
+             
+            }
           </div>
         </div>
       </div>
@@ -130,16 +124,6 @@
               />
             </button>
           </div>
-          <!--
-                Dropdown menu, show/hide based on menu state.
-    
-                Entering: "transition ease-out duration-100"
-                  From: "transform opacity-0 scale-95"
-                  To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                  From: "transform opacity-100 scale-100"
-                  To: "transform opacity-0 scale-95"
-              -->
           @if (isShowUserMenuButton) {
           <div
             class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -148,25 +132,17 @@
             aria-labelledby="user-menu-button"
             tabindex="-1"
           >
-            <!-- Active: "bg-gray-100", Not Active: "" -->
-            <div
+          @for (menu of navMenu; track $index) {
+            @if(menu.enabled){
+              <div
               class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
-              (click)="onMenuClick('/dashboard')"
+              routerLinkActive="bg-gray-900"
+              [routerLink]="menu.route"
             >
-              Dashboard
+              {{menu.trxMenulabel | trx }}
             </div>
-            <div
-              class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
-              (click)="onMenuClick('/booking')"
-            >
-              Booking
-            </div>
-            <div
-              class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
-              (click)="onMenuClick('/login')"
-            >
-              Sign out
-            </div>
+            }
+          }
           </div>
           }
         </div>
@@ -178,25 +154,18 @@
   @if (isShowMobileMenuButton) {
   <div class="sm:hidden" id="mobile-menu">
     <div class="space-y-1 px-2 pb-3 pt-2">
-      <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-      <div
-        class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white cursor-pointer"
-        (click)="onMenuClick('/dashboard')"
-      >
-        Dashboard
-      </div>
-      <div
-        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-        (click)="onMenuClick('/booking')"
-      >
-        Booking
-      </div>
-      <div
-        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-        (click)="onMenuClick('/profile')"
-      >
-        Profile
-      </div>
+      @for (menu of navMenu; track $index) {
+        @if(menu.enabled){
+          <div
+          class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
+          routerLinkActive="bg-gray-900"
+          [routerLink]="menu.route"
+        >
+          {{menu.trxMenulabel | trx }}
+        </div>
+        }
+        
+      }
     </div>
   </div>
   }
