@@ -24,6 +24,6 @@ export const NAV_MENU: IMenuItem[] = [
     {
         icon:'menu_logout',
         trxMenulabel:'trxMenu.logout',
-        route:'/login'
+        route:'/logout'
     }
 ]
