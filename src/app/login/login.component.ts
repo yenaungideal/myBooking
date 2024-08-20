@@ -23,6 +23,7 @@ import {
 } from '../../libs/translation';
 import { TranslocoService } from '@ngneat/transloco';
 import { IUsers, UsersService } from '../../data-access';
+import { AuthService, AuthStateEnum } from '../../data-access/auth';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -49,6 +50,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private translocoService: TranslocoService,
     private usersService: UsersService,
+    private authService : AuthService,
   ) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
@@ -66,14 +68,20 @@ export class LoginComponent implements OnInit {
       // Handle login logic here
       console.log('Email:', userEmail);
       console.log('Password:', password);
-      const user: IUsers = {
+      let user: IUsers = {
         id:1,
         name:'yenaung',
         email:userEmail,
         mobileNumber:'90294895',
         password:password,
-        roles:[{id:1,name:'admin'}]
+        roles:[]
       }; 
+      if(userEmail === 'ye.naung@gmail.com'){
+        user.roles.push({id:1,name:'admin'}); // checking with roleId.
+      }else{
+        user.roles.push({id:2,name:'staff'});// checking with roleId.
+      }
+      this.setLoggedInUserAuthState();
       this.setCurrentUserState(user);
       this.router.navigate(['dashboard']);
     }
@@ -87,6 +95,15 @@ export class LoginComponent implements OnInit {
       this.translocoService.setActiveLang('en');
       this.defaultLanguage.set('en');
     }
+  }
+
+  private setLoggedInUserAuthState(){
+    const state = {
+      token:123,
+      status: AuthStateEnum.SUCCESSED,
+      sessionExpiry:123
+    };
+    this.authService.setAuthState(state);
   }
 
   private setCurrentUserState(users:IUsers){
