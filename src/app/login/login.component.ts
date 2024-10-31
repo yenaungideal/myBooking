@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnInit, computed, effect, inject, signal } from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -24,6 +24,7 @@ import {
 import { TranslocoService } from '@ngneat/transloco';
 import { IUsers, UsersService } from '../../data-access';
 import { AuthService, AuthStateEnum } from '../../data-access/auth';
+import { IUserCredential } from './login.interface';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -42,20 +43,45 @@ import { AuthService, AuthStateEnum } from '../../data-access/auth';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  private router = inject(Router);
+  private translocoService = inject(TranslocoService);
+  private usersService = inject(UsersService);
+  private authService = inject(AuthService);
+
   public loginForm: FormGroup;
   public defaultLanguage = signal<'en' | 'zh'>('en');
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
+
+  private userCredentialS = signal<IUserCredential | undefined>(undefined)
+
+  private userQuery = computed(() => {
+    const userCredential = this.userCredentialS();
+    return this.usersService.getUserByCredential(userCredential);
+  })
+  
   constructor(
-    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env,
-    private router: Router,
-    private translocoService: TranslocoService,
-    private usersService: UsersService,
-    private authService : AuthService,
+    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env
   ) {
+    effect(() => {
+      const userQuery = this.userQuery();
+      if(!userQuery.error()){
+        const userQueryData = userQuery.data() as IUsers;
+        if(userQueryData){
+          console.log('---userQuery Data---',userQueryData);
+
+          this.setLoggedInUserAuthState();
+          this.setCurrentUserState(userQueryData);
+          this.router.navigate(['dashboard']);
+        }
+      }
+    })
+
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
+
+    
   }
 
   public ngOnInit(): void {
@@ -66,24 +92,24 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { userEmail, password } = this.loginForm.value;
       // Handle login logic here
-      console.log('Email:', userEmail);
-      console.log('Password:', password);
-      let user: IUsers = {
-        id:1,
-        name:'yenaung',
-        email:userEmail,
-        mobileNumber:'90294895',
-        password:password,
-        roles:[]
-      }; 
-      if(userEmail === 'ye.naung@gmail.com'){
-        user.roles.push({id:1,name:'admin'}); // checking with roleId.
-      }else{
-        user.roles.push({id:2,name:'staff'});// checking with roleId.
-      }
-      this.setLoggedInUserAuthState();
-      this.setCurrentUserState(user);
-      this.router.navigate(['dashboard']);
+      const userCredential : IUserCredential =  {userEmail:userEmail,password:password};
+      console.log('---userCredential---', userCredential);
+      this.userCredentialS.set(userCredential);
+      
+      
+      // let user: IUsers = {
+      //   id:1,
+      //   name:'yenaung',
+      //   email:userEmail,
+      //   mobileNumber:'90294895',
+      //   password:password,
+      //   roles:[]
+      // }; 
+      // if(userEmail === 'ye.naung@gmail.com'){
+      //   user.roles.push({id:1,name:'admin'}); // checking with roleId.
+      // }else{
+      //   user.roles.push({id:2,name:'staff'});// checking with roleId.
+      // }
     }
   }
 

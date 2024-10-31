@@ -1,6 +1,8 @@
 {
-    "name":"Elbes",
-    "roles":["admin","marketingUser"],
+    "name":"Ye Naung",
+    "email": "ye.naung@gmail.com",
+    "mobileNumber": "90294895",
+    "roles":[{"id":1,"name":"admin"},{"id":3,"name":"marketingUser"}],
     "address":{
         "unit":"#04-122",
         "street":"Jalan Batu",

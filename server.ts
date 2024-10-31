@@ -1,8 +1,10 @@
 const express = require('express');
+const cors = require('cors'); // Import the cors package
 const app = express();
 const port = 3350;
 const mockFilePath = './mocks/_index.ts';
 
+app.use(cors()); // Use CORS middleware to allow cross-origin requests
 app.use(express.json());
 app.listen(port,() => console.log(`Mock server app listening on port ${port}!`));
 
