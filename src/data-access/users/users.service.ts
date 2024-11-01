@@ -9,15 +9,17 @@ import {
 import { IUsers } from './users.interface';
 import { ApiQueryResult, SHOW_UNIVERSAL_LOADER } from '../../libs/types';
 import { Env } from '../../environments';
-import { ApiCacheService } from '../../libs/services';
+import { ApiCacheService, ApiService } from '../../libs/services';
 import { HttpContext } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
+  public currentUser = computed(() => this.state());
   protected state = signal<IUsers | undefined>(undefined);
   private readonly apiCacheService = inject(ApiCacheService);
+  private readonly apiService = inject(ApiService);
   private readonly injector = inject(Injector);
-  public currentUser = computed(() => this.state());
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {}
 
@@ -29,7 +31,7 @@ export class UsersService {
     this.state.set(user);
   }
 
-  public getUserByCredential(credential: any): ApiQueryResult<unknown> {
+  public getUsers(credential: any): ApiQueryResult<unknown> {
     const payload = credential;
     const url = `${this.ENVIRONMENT.API_URL}/user`;
     const queryKeys = ['user', 'list', credential];
@@ -42,5 +44,13 @@ export class UsersService {
         context: new HttpContext().set(SHOW_UNIVERSAL_LOADER, true),
       }
     );
+  }
+
+  public getUserByCredential<T>(credential: any): Observable<T> {
+    const payload = credential;
+    const url = `${this.ENVIRONMENT.API_URL}/user`;
+    return this.apiService.post(url, payload, {
+      context: new HttpContext().set(SHOW_UNIVERSAL_LOADER, true),
+    });
   }
 }

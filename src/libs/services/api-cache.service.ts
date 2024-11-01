@@ -1,6 +1,12 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable, Injector, inject } from '@angular/core';
-import { ApiInfiniteData, ApiInfiniteQueryResult, ApiQueryResult, IApiPageParam, IApiTableData } from './../types/index';
+import {
+  ApiInfiniteData,
+  ApiInfiniteQueryResult,
+  ApiQueryResult,
+  IApiPageParam,
+  IApiTableData,
+} from './../types/index';
 import {
   CreateInfiniteQueryResult,
   InfiniteData,
@@ -9,7 +15,7 @@ import {
   injectInfiniteQuery,
   injectMutation,
   injectQuery,
-  injectQueryClient
+  injectQueryClient,
 } from '@tanstack/angular-query-experimental';
 import { Observable, fromEvent, lastValueFrom, takeUntil } from 'rxjs';
 import { ApiService } from '.';
@@ -28,10 +34,13 @@ export class ApiCacheService {
     return injectQuery(
       () => ({
         queryKey: queryKey,
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         queryFn: async (context) => {
           const abort$ = fromEvent(context.signal, 'abort');
-          return lastValueFrom(this.http.get<T>(url, httpOptions).pipe(takeUntil(abort$)));
-        }
+          return lastValueFrom(
+            this.http.get<T>(url, httpOptions).pipe(takeUntil(abort$))
+          );
+        },
       }),
       injector
     );
@@ -64,7 +73,10 @@ export class ApiCacheService {
   ): ApiInfiniteQueryResult<ApiInfiniteData<IApiTableData<T>, number>, Error> {
     return this.infiniteQuery<T, G>(
       (params: HttpParams) => {
-        return this.http.post<G>(url, JSON.stringify(data), { ...httpOptions, params });
+        return this.http.post<G>(url, JSON.stringify(data), {
+          ...httpOptions,
+          params,
+        });
       },
       pageParam,
       queryKey,
@@ -82,10 +94,15 @@ export class ApiCacheService {
     return injectQuery(
       () => ({
         queryKey: queryKey,
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         queryFn: async (context) => {
           const abort$ = fromEvent(context.signal, 'abort');
-          return lastValueFrom(this.http.post<T>(url, JSON.stringify(data), httpOptions).pipe(takeUntil(abort$)));
-        }
+          return lastValueFrom(
+            this.http
+              .post<T>(url, JSON.stringify(data), httpOptions)
+              .pipe(takeUntil(abort$))
+          );
+        },
       }),
       injector
     );
@@ -98,7 +115,12 @@ export class ApiCacheService {
     injector: Injector,
     httpOptions: HttpOptions = {}
   ): Promise<T> {
-    return this.mutate(data, this.http.post<T>(url, JSON.stringify(data), httpOptions), queryKeys, injector);
+    return this.mutate(
+      data,
+      this.http.post<T>(url, JSON.stringify(data), httpOptions),
+      queryKeys,
+      injector
+    );
   }
 
   public post2<T, D>(
@@ -108,7 +130,12 @@ export class ApiCacheService {
     injector: Injector,
     httpOptions: HttpOptions = {}
   ): Promise<T> {
-    return this.mutate(data, this.http.post2<T, D>(url, data, httpOptions), queryKeys, injector);
+    return this.mutate(
+      data,
+      this.http.post2<T, D>(url, data, httpOptions),
+      queryKeys,
+      injector
+    );
   }
 
   public put<T, D>(
@@ -118,7 +145,12 @@ export class ApiCacheService {
     injector?: Injector,
     httpOptions: HttpOptions = {}
   ): Promise<T> {
-    return this.mutate(data, this.http.put<T>(url, JSON.stringify(data), httpOptions), queryKeys, injector);
+    return this.mutate(
+      data,
+      this.http.put<T>(url, JSON.stringify(data), httpOptions),
+      queryKeys,
+      injector
+    );
   }
 
   public put2<T, D>(
@@ -128,7 +160,12 @@ export class ApiCacheService {
     injector: Injector,
     httpOptions: HttpOptions = {},
     refetchType = 'active' as any,
-    successCallback?: (client: QueryClient, queryKeys: QueryKey[], refetchType: any, data: any) => void
+    successCallback?: (
+      client: QueryClient,
+      queryKeys: QueryKey[],
+      refetchType: any,
+      data: any
+    ) => void
   ): Promise<T> {
     return this.mutate(
       data,
@@ -147,7 +184,12 @@ export class ApiCacheService {
     injector: Injector,
     httpOptions: HttpOptions = {}
   ): Promise<T> {
-    return this.mutate(data, this.http.patch<T>(url, data, httpOptions), queryKeys, injector);
+    return this.mutate(
+      data,
+      this.http.patch<T>(url, data, httpOptions),
+      queryKeys,
+      injector
+    );
   }
 
   public patch2<T, D>(
@@ -157,7 +199,12 @@ export class ApiCacheService {
     injector: Injector,
     httpOptions: HttpOptions = {}
   ): Promise<T> {
-    return this.mutate(data, this.http.patch2<T, D>(url, data, httpOptions), queryKeys, injector);
+    return this.mutate(
+      data,
+      this.http.patch2<T, D>(url, data, httpOptions),
+      queryKeys,
+      injector
+    );
   }
 
   public delete<T, D>(
@@ -167,7 +214,12 @@ export class ApiCacheService {
     injector: Injector,
     httpOptions: HttpOptions = {}
   ): Promise<T> {
-    return this.mutate(data, this.http.delete<T, D>(url, { ...httpOptions, body: data }), queryKeys, injector);
+    return this.mutate(
+      data,
+      this.http.delete<T, D>(url, { ...httpOptions, body: data }),
+      queryKeys,
+      injector
+    );
   }
 
   public infiniteQuery<T, G>(
@@ -179,8 +231,12 @@ export class ApiCacheService {
     return injectInfiniteQuery(
       () => ({
         queryKey: queryKey,
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         queryFn: async (context) => {
-          const params = this.generatePageHttpParams(pageParam, context.pageParam);
+          const params = this.generatePageHttpParams(
+            pageParam,
+            context.pageParam
+          );
           const abort$ = fromEvent(context.signal, 'abort');
           return this.transformData(
             await lastValueFrom(fn(params).pipe(takeUntil(abort$))),
@@ -189,8 +245,10 @@ export class ApiCacheService {
           );
         },
         initialPageParam: pageParam.startPage,
-        getNextPageParam: (page) => (page.number + 1 < page.totalPages ? page.number + 1 : undefined),
-        getPreviousPageParam: (page) => (page.number > pageParam.startPage ? page.number - 1 : undefined)
+        getNextPageParam: (page) =>
+          page.number + 1 < page.totalPages ? page.number + 1 : undefined,
+        getPreviousPageParam: (page) =>
+          page.number > pageParam.startPage ? page.number - 1 : undefined,
       }),
       injector
     );
@@ -210,20 +268,39 @@ export class ApiCacheService {
     injectQueryClient({ injector }).clear();
   }
 
-  protected generatePageHttpParams(pageParam: IApiPageParam, pageNumber: number): HttpParams {
+  protected generatePageHttpParams(
+    pageParam: IApiPageParam,
+    pageNumber: number
+  ): HttpParams {
     if (!pageParam) throw new Error('Page parameter is missing.');
     let params = new HttpParams().set('page', pageNumber);
     params = params.append('size', 'size' in pageParam ? pageParam.size : 10);
-    if (pageParam.sort) params = params.append('sort', Object.entries(pageParam.sort).join(',').replace(/_/g, ''));
+    if (pageParam.sort)
+      params = params.append(
+        'sort',
+        Object.entries(pageParam.sort).join(',').replace(/_/g, '')
+      );
     return params;
   }
 
-  protected transformData<T, G>(data: G, pageNumber: number, pageParam: IApiPageParam): IApiTableData<T> {
+  protected transformData<T, G>(
+    data: G,
+    pageNumber: number,
+    pageParam: IApiPageParam
+  ): IApiTableData<T> {
     return data as IApiTableData<T>;
   }
 
-  private defaultSuccessCallback(cl: QueryClient, queryKeys: QueryKey[], refetchType: any, data: any): void {
-    queryKeys.forEach(async (queryKey: any) => await cl.invalidateQueries({ queryKey, refetchType }));
+  private defaultSuccessCallback(
+    cl: QueryClient,
+    queryKeys: QueryKey[],
+    refetchType: any,
+    data: any
+  ): void {
+    queryKeys.forEach(
+      async (queryKey: any) =>
+        await cl.invalidateQueries({ queryKey, refetchType })
+    );
   }
 
   private mutate<T, D>(
@@ -238,15 +315,17 @@ export class ApiCacheService {
       const mutation = injectMutation((client): any => {
         return {
           mutationFn: (data: D) => lastValueFrom(api),
+          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
           onError: (error: Error) => {
             reject(error);
           },
           //successCallback.bind(this, client, queryKeys, injector)
+          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
           onSuccess: (data: D) => {
             successCallback(client, queryKeys, refetchType, data);
 
             resolve(data as any);
-          }
+          },
         };
       }, injector);
 

@@ -1,4 +1,13 @@
-import { Component, Inject, OnInit, computed, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -25,6 +34,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { IUsers, UsersService } from '../../data-access';
 import { AuthService, AuthStateEnum } from '../../data-access/auth';
 import { IUserCredential } from './login.interface';
+import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -40,76 +50,51 @@ import { IUserCredential } from './login.interface';
     TranslatePipe,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
+  public loginForm: FormGroup;
+  public defaultLanguage = signal<'en' | 'zh'>('en');
   private router = inject(Router);
   private translocoService = inject(TranslocoService);
   private usersService = inject(UsersService);
   private authService = inject(AuthService);
 
-  public loginForm: FormGroup;
-  public defaultLanguage = signal<'en' | 'zh'>('en');
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
 
-  private userCredentialS = signal<IUserCredential | undefined>(undefined)
-
-  private userQuery = computed(() => {
-    const userCredential = this.userCredentialS();
-    return this.usersService.getUserByCredential(userCredential);
-  })
-  
-  constructor(
-    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env
-  ) {
-    effect(() => {
-      const userQuery = this.userQuery();
-      if(!userQuery.error()){
-        const userQueryData = userQuery.data() as IUsers;
-        if(userQueryData){
-          console.log('---userQuery Data---',userQueryData);
-
-          this.setLoggedInUserAuthState();
-          this.setCurrentUserState(userQueryData);
-          this.router.navigate(['dashboard']);
-        }
-      }
-    })
-
+  constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
-
-    
   }
 
   public ngOnInit(): void {
     this.setDefaultLanguage('zh');
   }
 
-  public onSubmit() {
+  public async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
       const { userEmail, password } = this.loginForm.value;
       // Handle login logic here
-      const userCredential : IUserCredential =  {userEmail:userEmail,password:password};
-      console.log('---userCredential---', userCredential);
-      this.userCredentialS.set(userCredential);
-      
-      
-      // let user: IUsers = {
-      //   id:1,
-      //   name:'yenaung',
-      //   email:userEmail,
-      //   mobileNumber:'90294895',
-      //   password:password,
-      //   roles:[]
-      // }; 
-      // if(userEmail === 'ye.naung@gmail.com'){
-      //   user.roles.push({id:1,name:'admin'}); // checking with roleId.
-      // }else{
-      //   user.roles.push({id:2,name:'staff'});// checking with roleId.
-      // }
+      const userCredential: IUserCredential = {
+        userEmail: userEmail,
+        password: password,
+      };
+      try {
+        const user = await lastValueFrom(
+          this.usersService.getUserByCredential<IUsers>(userCredential)
+        );
+
+        if (user) {
+          this.setLoggedInUserAuthState();
+          this.setCurrentUserState(user);
+          this.router.navigate(['dashboard']);
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      }
     }
   }
 
@@ -123,16 +108,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private setLoggedInUserAuthState(){
+  private setLoggedInUserAuthState(): void {
     const state = {
-      token:123,
+      token: 123,
       status: AuthStateEnum.SUCCESSED,
-      sessionExpiry:123
+      sessionExpiry: 123,
     };
     this.authService.setAuthState(state);
   }
 
-  private setCurrentUserState(users:IUsers){
+  private setCurrentUserState(users: IUsers): void {
     this.usersService.setCurrentUser(users);
   }
 }
