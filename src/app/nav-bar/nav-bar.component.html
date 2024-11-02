@@ -64,18 +64,15 @@
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
-            @for (menu of navMenu; track $index) {
-              @if(menu.enabled){
-                <div
-                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-                routerLinkActive="bg-gray-700"
-                [routerLink]="menu.route"
-              >
-                {{menu.trxMenulabel | trx }}
-              </div>
-              }
-             
-            }
+            @for (menu of navMenu; track $index) { @if(menu.enabled){
+            <div
+              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
+              routerLinkActive="bg-gray-700"
+              [routerLink]="menu.route"
+            >
+              {{ menu.trxMenuLabel | trx }}
+            </div>
+            } }
           </div>
         </div>
       </div>
@@ -132,17 +129,15 @@
             aria-labelledby="user-menu-button"
             tabindex="-1"
           >
-          @for (menu of navMenu; track $index) {
-            @if(menu.enabled){
-              <div
+            @for (menu of navMenu; track $index) { @if(menu.enabled){
+            <div
               class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
               routerLinkActive="bg-gray-300"
               [routerLink]="menu.route"
             >
-              {{menu.trxMenulabel | trx }}
+              {{ menu.trxMenuLabel | trx }}
             </div>
-            }
-          }
+            } }
           </div>
           }
         </div>
@@ -154,18 +149,15 @@
   @if (isShowMobileMenuButton) {
   <div class="sm:hidden" id="mobile-menu">
     <div class="space-y-1 px-2 pb-3 pt-2">
-      @for (menu of navMenu; track $index) {
-        @if(menu.enabled){
-          <div
-          class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-          routerLinkActive="bg-gray-700"
-          [routerLink]="menu.route"
-        >
-          {{menu.trxMenulabel | trx }}
-        </div>
-        }
-        
-      }
+      @for (menu of navMenu; track $index) { @if(menu.enabled){
+      <div
+        class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
+        routerLinkActive="bg-gray-700"
+        [routerLink]="menu.route"
+      >
+        {{ menu.trxMenuLabel | trx }}
+      </div>
+      } }
     </div>
   </div>
   }

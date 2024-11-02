@@ -1,10 +1,12 @@
 {
-    "name":"Elbes",
-    "roles":["admin","marketingUser"],
-    "address":{
-        "unit":"#04-122",
-        "street":"Jalan Batu",
-        "postalCode":"431004",
-        "country":"Singapore"
-    }
+  "name": "Ye Naung",
+  "email": "ye.naung@gmail.com",
+  "mobileNumber": "90294895",
+  "roles": [{ "id": 1, "name": "Admin" }],
+  "address": {
+    "unit": "#04-122",
+    "street": "Jalan Batu",
+    "postalCode": "431004",
+    "country": "Singapore"
+  }
 }

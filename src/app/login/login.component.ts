@@ -1,4 +1,13 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -24,6 +33,8 @@ import {
 import { TranslocoService } from '@ngneat/transloco';
 import { IUsers, UsersService } from '../../data-access';
 import { AuthService, AuthStateEnum } from '../../data-access/auth';
+import { IUserCredential } from './login.interface';
+import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -39,19 +50,19 @@ import { AuthService, AuthStateEnum } from '../../data-access/auth';
     TranslatePipe,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public defaultLanguage = signal<'en' | 'zh'>('en');
+  private router = inject(Router);
+  private translocoService = inject(TranslocoService);
+  private usersService = inject(UsersService);
+  private authService = inject(AuthService);
+
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
-  constructor(
-    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env,
-    private router: Router,
-    private translocoService: TranslocoService,
-    private usersService: UsersService,
-    private authService : AuthService,
-  ) {
+
+  public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
@@ -62,28 +73,28 @@ export class LoginComponent implements OnInit {
     this.setDefaultLanguage('zh');
   }
 
-  public onSubmit() {
+  public async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
       const { userEmail, password } = this.loginForm.value;
       // Handle login logic here
-      console.log('Email:', userEmail);
-      console.log('Password:', password);
-      let user: IUsers = {
-        id:1,
-        name:'yenaung',
-        email:userEmail,
-        mobileNumber:'90294895',
-        password:password,
-        roles:[]
-      }; 
-      if(userEmail === 'ye.naung@gmail.com'){
-        user.roles.push({id:1,name:'admin'}); // checking with roleId.
-      }else{
-        user.roles.push({id:2,name:'staff'});// checking with roleId.
+      const userCredential: IUserCredential = {
+        userEmail: userEmail,
+        password: password,
+      };
+      try {
+        const user = await lastValueFrom(
+          this.usersService.getUserByCredential<IUsers>(userCredential)
+        );
+
+        if (user) {
+          this.setLoggedInUserAuthState();
+          this.setCurrentUserState(user);
+          this.router.navigate(['dashboard']);
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
       }
-      this.setLoggedInUserAuthState();
-      this.setCurrentUserState(user);
-      this.router.navigate(['dashboard']);
     }
   }
 
@@ -97,16 +108,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private setLoggedInUserAuthState(){
+  private setLoggedInUserAuthState(): void {
     const state = {
-      token:123,
+      token: 123,
       status: AuthStateEnum.SUCCESSED,
-      sessionExpiry:123
+      sessionExpiry: 123,
     };
     this.authService.setAuthState(state);
   }
 
-  private setCurrentUserState(users:IUsers){
+  private setCurrentUserState(users: IUsers): void {
     this.usersService.setCurrentUser(users);
   }
 }
