@@ -31,19 +31,12 @@ export class UsersService {
     this.state.set(user);
   }
 
-  public getUsers(credential: any): ApiQueryResult<unknown> {
-    const payload = credential;
+  public getUsers(): ApiQueryResult<unknown> {
     const url = `${this.ENVIRONMENT.API_URL}/user`;
-    const queryKeys = ['user', 'list', credential];
-    return this.apiCacheService.postQuery(
-      url,
-      payload,
-      queryKeys,
-      this.injector,
-      {
-        context: new HttpContext().set(SHOW_UNIVERSAL_LOADER, true),
-      }
-    );
+    const queryKeys = ['user', 'list'];
+    return this.apiCacheService.getQuery(url, queryKeys, this.injector, {
+      context: new HttpContext().set(SHOW_UNIVERSAL_LOADER, true),
+    });
   }
 
   public getUserByCredential<T>(credential: any): Observable<T> {

@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
 
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
 
-  constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
+  public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
