@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform, inject } from '@angular/core';
 import { HashMap, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { take } from 'rxjs';
 import { trxFindMatch } from './find-match';
 import { TranslocoHttpLoader } from './translate.loader';
-import { take } from 'rxjs';
 
 @Pipe({
   name: 'trx',
@@ -36,8 +36,7 @@ export class TranslatePipe extends TranslocoPipe implements PipeTransform {
       );
 
       return super.transform(fullKey || key, params, inlineLang);
-    } else {
     }
-    return key;
+    return super.transform(key, params, inlineLang) || key;
   }
 }
