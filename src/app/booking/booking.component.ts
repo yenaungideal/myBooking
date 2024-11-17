@@ -11,16 +11,26 @@ import { BookingService } from '../../data-access/booking/booking.service';
 import { Env } from '../../environments';
 import { IBooking } from '../../data-access/booking/booking.interface';
 import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatTableModule],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',
 })
 export class BookingComponent {
+  public displayedColumns = [
+    'id',
+    'type',
+    'bookingDate',
+    'mobileNumber',
+    'time',
+  ];
+
   public bookingsS = signal<IBooking[]>([]);
+
   private bookingService = inject(BookingService);
   private bookingQuery = computed(() => {
     return this.bookingService.getBooking();
