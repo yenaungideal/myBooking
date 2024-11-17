@@ -36,7 +36,6 @@ export class TranslatePipe extends TranslocoPipe implements PipeTransform {
       );
 
       return super.transform(fullKey || key, params, inlineLang);
-    } else {
     }
     return key;
   }

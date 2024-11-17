@@ -13,6 +13,7 @@ export class TranslocoHttpLoader implements TranslocoLoader {
   private ENVIRONMENT = environment;
 
   private http = new HttpClient(
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     new HttpXhrBackend({ build: () => new XMLHttpRequest() })
   );
 

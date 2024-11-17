@@ -1,16 +1,13 @@
-import { HttpContext, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
 
-export interface HttpOptions{
-    headers?:
-    | HttpHeaders
-    | {
-        [header: string] : string | string[];
-    };
-    context?: HttpContext;
-    params?:
+export interface HttpOptions {
+  headers?: HttpHeaders | Record<string, string | string[]>;
+  context?: HttpContext;
+  params?:
     | HttpParams
-    | {
-        [param: string] : string | number | boolean | ReadonlyArray<string | number | boolean>;
-    };
-    body?: any | null;
+    | Record<
+        string,
+        string | number | boolean | readonly (string | number | boolean)[]
+      >;
+  body?: any | null;
 }

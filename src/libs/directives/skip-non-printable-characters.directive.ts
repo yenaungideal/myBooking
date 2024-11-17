@@ -3,14 +3,14 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[skipNonPrintableCharacters]',
-  standalone: true
+  standalone: true,
 })
 export class SkipNonPrintableCharactersDirective {
   @Input() public skipNonPrintableCharacters = false;
   public constructor(private element: ElementRef) {}
 
   @HostListener('input', ['$event'])
-  public logChange(event: KeyboardEvent) {
+  public logChange(event: KeyboardEvent): void {
     if (!this.skipNonPrintableCharacters) return;
     const inputText = (event.target as HTMLInputElement).value;
     const regex = new RegExp(/[^\x20-\x7E]+/g, 'g');
