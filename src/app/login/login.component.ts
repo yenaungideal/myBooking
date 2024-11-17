@@ -52,14 +52,14 @@ import { lastValueFrom } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   public loginForm: FormGroup;
   public defaultLanguage = signal<'en' | 'zh'>('en');
+
   private router = inject(Router);
-  private translocoService = inject(TranslocoService);
   private usersService = inject(UsersService);
   private authService = inject(AuthService);
-
+  private translocoService = inject(TranslocoService);
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
@@ -67,10 +67,7 @@ export class LoginComponent implements OnInit {
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
-  }
-
-  public ngOnInit(): void {
-    this.setDefaultLanguage('zh');
+    this.setDefaultLanguage('en');
   }
 
   public async onSubmit(): Promise<void> {

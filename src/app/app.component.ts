@@ -9,6 +9,7 @@ import {
 import { MatButton } from '@angular/material/button';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslatePipe } from '../libs/translation';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,11 @@ export class AppComponent implements OnDestroy {
     router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         // * NavigationEnd: When navigation ends successfully.
-        if (event.url !== '/login' && event.url !== '/logout' && event.url !== '/') {
+        if (
+          event.url !== '/login' &&
+          event.url !== '/logout' &&
+          event.url !== '/'
+        ) {
           this.isShowNavBar = true;
         } else {
           this.isShowNavBar = false;
