@@ -3,8 +3,8 @@ import {
   HttpErrorResponse,
   HttpXhrBackend,
 } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { Translation, TranslocoLoader } from '@ngneat/transloco';
+import { Injectable } from '@angular/core';
+import { Translation, TranslocoLoader } from '@jsverse/transloco';
 import { EMPTY, Observable, catchError } from 'rxjs';
 import { environment } from '../../environments';
 

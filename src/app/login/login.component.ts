@@ -1,40 +1,27 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-  computed,
-  effect,
-  inject,
-  signal,
-  untracked,
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Inject, inject, signal } from '@angular/core';
 import {
   FormControl,
-  Validators,
+  FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  FormGroup,
+  Validators,
 } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
+import { lastValueFrom } from 'rxjs';
+import { IUsers, UsersService } from '../../data-access';
+import { AuthService, AuthStateEnum } from '../../data-access/auth';
+import { Env } from '../../environments';
 import {
   SkipNonPrintableCharactersDirective,
   SkipWhitespaceDirective,
 } from '../../libs/directives';
-import { CommonModule } from '@angular/common';
-import { Env } from '../../environments';
-import {
-  TRANSL_LANGS,
-  TranslatePipe,
-  TranslateService,
-} from '../../libs/translation';
-import { TranslocoService } from '@ngneat/transloco';
-import { IUsers, UsersService } from '../../data-access';
-import { AuthService, AuthStateEnum } from '../../data-access/auth';
+import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
 import { IUserCredential } from './login.interface';
-import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,

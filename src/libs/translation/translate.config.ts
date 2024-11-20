@@ -10,12 +10,12 @@ import {
   TranslocoPipe,
   TranslocoService,
   provideTransloco,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 
-import { TranslateService } from './translate.service';
-import { TranslatePipe } from './translate.pipe';
 import { TRANSL_LANGS } from './translate-languages';
 import { TranslocoHttpLoader } from './translate.loader';
+import { TranslatePipe } from './translate.pipe';
+import { TranslateService } from './translate.service';
 
 /** INFO: custom wrapper to provide transloco base config */
 export function translationProvider(): EnvironmentProviders {

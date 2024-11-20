@@ -4,7 +4,7 @@ import {
   TranslateParams,
   TranslocoScope,
   TranslocoService,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 import { Observable, take } from 'rxjs';
 import { trxFindMatch } from './find-match';
 import { TranslocoHttpLoader } from './translate.loader';
