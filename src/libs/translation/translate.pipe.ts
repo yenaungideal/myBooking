@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform, inject } from '@angular/core';
-import { HashMap, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { HashMap, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { take } from 'rxjs';
 import { trxFindMatch } from './find-match';
 import { TranslocoHttpLoader } from './translate.loader';
-import { take } from 'rxjs';
 
 @Pipe({
   name: 'trx',
