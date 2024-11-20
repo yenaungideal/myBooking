@@ -14,11 +14,10 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
-  selector: 'app-booking',
-  standalone: true,
-  imports: [CommonModule, MatTableModule],
-  templateUrl: './booking.component.html',
-  styleUrl: './booking.component.scss',
+    selector: 'app-booking',
+    imports: [CommonModule, MatTableModule],
+    templateUrl: './booking.component.html',
+    styleUrl: './booking.component.scss'
 })
 export class BookingComponent {
   public displayedColumns = [

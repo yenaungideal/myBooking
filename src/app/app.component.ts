@@ -12,11 +12,10 @@ import { Subject, takeUntil } from 'rxjs';
 import { TranslatePipe } from '../libs/translation';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, MatButton, NavBarComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    imports: [RouterOutlet, MatButton, NavBarComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnDestroy {
   public isShowNavBar = false;
