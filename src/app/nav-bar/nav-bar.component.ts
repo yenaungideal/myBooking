@@ -6,11 +6,10 @@ import { PermissionsService } from '../../libs/permission-checkers/permissions.s
 import { TranslatePipe } from '../../libs/translation';
 
 @Component({
-  selector: 'app-nav-bar',
-  standalone: true,
-  imports: [RouterModule, TranslatePipe],
-  templateUrl: './nav-bar.component.html',
-  styleUrl: './nav-bar.component.scss',
+    selector: 'app-nav-bar',
+    imports: [RouterModule, TranslatePipe],
+    templateUrl: './nav-bar.component.html',
+    styleUrl: './nav-bar.component.scss'
 })
 export class NavBarComponent implements OnInit {
   isShowUserMenuButton = false;

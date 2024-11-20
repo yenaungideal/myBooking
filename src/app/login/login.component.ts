@@ -23,21 +23,20 @@ import {
 import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
 import { IUserCredential } from './login.interface';
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    SkipNonPrintableCharactersDirective,
-    SkipWhitespaceDirective,
-    TranslatePipe,
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+    selector: 'app-login',
+    imports: [
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        SkipNonPrintableCharactersDirective,
+        SkipWhitespaceDirective,
+        TranslatePipe,
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   public loginForm: FormGroup;
