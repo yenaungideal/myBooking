@@ -5,7 +5,7 @@
   "trxLogin.email.validator.required": "Email is required",
   "trxLogin.email.validator.invalid": "Please enter a valid email address",
   "trxLogin.password": "Password",
-  "trxLogin.password.validator.required": "Email is required",
+  "trxLogin.password.validator.required": "Password is required",
   "trxLogin.password.validator.invalid": "Please enter a valid password",
   "trxMenu.dashboard":"Dashboard",
   "trxMenu.booking":"Booking",

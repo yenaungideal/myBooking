@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   HashMap,
   TranslateParams,
+  Translation,
   TranslocoScope,
   TranslocoService,
 } from '@jsverse/transloco';
@@ -58,5 +59,17 @@ export class TranslateService {
     _isObject?: boolean | undefined
   ): Observable<T> {
     return this._service.selectTranslate(key, params, lang, _isObject);
+  }
+
+  public getActiveLang(): string {
+    return this._service.getActiveLang();
+  }
+
+  public getTranslation(): Map<string, Translation> {
+    return this._service.getTranslation();
+  }
+
+  public setTranslation(translations: Translation): void {
+    this._service.setTranslation(translations);
   }
 }

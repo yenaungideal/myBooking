@@ -18,6 +18,7 @@ export class TranslatePipe extends TranslocoPipe implements PipeTransform {
     params?: HashMap | undefined,
     inlineLang?: string | undefined
   ): string {
+    console.log('---key---', key);
     const currentLang = this._service.getActiveLang();
     const translationsMap = this._service.getTranslation();
     if (!translationsMap.size) {

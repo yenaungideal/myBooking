@@ -67,10 +67,9 @@
             @for (menu of navMenu; track $index) { @if(menu.enabled){
             <div
               class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-              routerLinkActive="bg-gray-700"
-              [routerLink]="menu.route"
+              routerLinkActive="bg-gray-700" trx [key]="menu.trxMenuLabel"
+              [routerLink]="menu.route" 
             >
-              {{ menu.trxMenuLabel | trx }}
             </div>
             } }
           </div>
@@ -132,10 +131,9 @@
             @for (menu of navMenu; track $index) { @if(menu.enabled){
             <div
               class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
-              routerLinkActive="bg-gray-300"
+              routerLinkActive="bg-gray-300" trx [key]="menu.trxMenuLabel"
               [routerLink]="menu.route"
             >
-              {{ menu.trxMenuLabel | trx }}
             </div>
             } }
           </div>
@@ -152,10 +150,9 @@
       @for (menu of navMenu; track $index) { @if(menu.enabled){
       <div
         class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
-        routerLinkActive="bg-gray-700"
+        routerLinkActive="bg-gray-700" trx [key]="menu.trxMenuLabel"
         [routerLink]="menu.route"
       >
-        {{ menu.trxMenuLabel | trx }}
       </div>
       } }
     </div>

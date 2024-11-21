@@ -1,15 +1,16 @@
-import { Component, Inject, OnInit, output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IMenuItem, NAV_MENU } from './nav-bar.config';
 import { Env } from '../../environments';
 import { PermissionsService } from '../../libs/permission-checkers/permissions.service';
-import { TranslatePipe } from '../../libs/translation';
+import { TranslateDirective } from '../../libs/translation';
+import { IMenuItem, NAV_MENU } from './nav-bar.config';
 
 @Component({
-    selector: 'app-nav-bar',
-    imports: [RouterModule, TranslatePipe],
-    templateUrl: './nav-bar.component.html',
-    styleUrl: './nav-bar.component.scss'
+  selector: 'app-nav-bar',
+  standalone: true,
+  imports: [RouterModule, TranslateDirective],
+  templateUrl: './nav-bar.component.html',
+  styleUrl: './nav-bar.component.scss',
 })
 export class NavBarComponent implements OnInit {
   isShowUserMenuButton = false;
@@ -23,7 +24,6 @@ export class NavBarComponent implements OnInit {
 
   public ngOnInit(): void {
     this.navMenu.forEach((menu) => (menu.enabled = this.setMenuState(menu)));
-    console.log('---navMenu---', this.navMenu);
   }
 
   private setMenuState(menu: IMenuItem): boolean {
