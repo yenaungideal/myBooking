@@ -30,9 +30,11 @@ export function translationProvider(): EnvironmentProviders {
         availableLangs: TRANSL_LANGS,
         defaultLang: 'en',
         fallbackLang: 'en',
+        failedRetries: 1,
         missingHandler: {
           // It will use the first language set in the fallbackLang property
           useFallbackTranslation: true,
+          logMissingKey: true,
         },
         // Remove this option if your application doesn't support changing language in runtime.
         reRenderOnLangChange: true,

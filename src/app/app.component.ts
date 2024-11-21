@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import {
   ActivatedRoute,
   Event,
@@ -6,16 +7,15 @@ import {
   Router,
   RouterOutlet,
 } from '@angular/router';
-import { MatButton } from '@angular/material/button';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { Subject, takeUntil } from 'rxjs';
-import { TranslatePipe } from '../libs/translation';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, MatButton, NavBarComponent],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  selector: 'app-root',
+  imports: [RouterOutlet, MatButton, NavBarComponent],
+  standalone: true,
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnDestroy {
   public isShowNavBar = false;

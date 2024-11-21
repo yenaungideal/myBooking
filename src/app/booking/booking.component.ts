@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
@@ -7,17 +8,17 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { IBooking } from '../../data-access/booking/booking.interface';
 import { BookingService } from '../../data-access/booking/booking.service';
 import { Env } from '../../environments';
-import { IBooking } from '../../data-access/booking/booking.interface';
-import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
 
 @Component({
-    selector: 'app-booking',
-    imports: [CommonModule, MatTableModule],
-    templateUrl: './booking.component.html',
-    styleUrl: './booking.component.scss'
+  selector: 'app-booking',
+  imports: [CommonModule, MatTableModule],
+  standalone: true,
+  templateUrl: './booking.component.html',
+  styleUrl: './booking.component.scss',
 })
 export class BookingComponent {
   public displayedColumns = [

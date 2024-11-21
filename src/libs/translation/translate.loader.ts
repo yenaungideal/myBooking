@@ -17,8 +17,6 @@ export class TranslocoHttpLoader implements TranslocoLoader {
     new HttpXhrBackend({ build: () => new XMLHttpRequest() })
   );
 
-  public constructor() {}
-
   public getTranslation(lang: string): Observable<Translation> {
     return this.fetchLanguageFromBackend(lang).pipe(
       catchError((e: HttpErrorResponse) => {
