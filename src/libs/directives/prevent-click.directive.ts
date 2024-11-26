@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[haloPreventClick]',
+  selector: '[preventClick]',
   standalone: true,
 })
 export class HaloPreventClickDirective {
