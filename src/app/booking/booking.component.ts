@@ -32,20 +32,16 @@ export class BookingComponent {
   public bookingsS = signal<IBooking[]>([]);
 
   private bookingService = inject(BookingService);
-  private bookingQuery = computed(() => {
-    return this.bookingService.getBooking();
+  private bookingQueryData = computed(async () => {
+    return (await this.bookingService.getBooking().data()) as IBooking[];
   });
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
-    effect(() => {
-      const bookingQuery = this.bookingQuery();
+    effect(async () => {
+      const bookingQueryData = await this.bookingQueryData();
       untracked(() => {
-        if (!bookingQuery.error()) {
-          const bookingQueryData = bookingQuery.data() as IBooking[];
-          if (bookingQueryData) {
-            console.log('---bookingQuery Data---', bookingQueryData);
-            this.bookingsS.set(bookingQueryData);
-          }
+        if (bookingQueryData) {
+          this.bookingsS.set(bookingQueryData);
         }
       });
     });
