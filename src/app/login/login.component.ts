@@ -20,7 +20,9 @@ import {
   SkipNonPrintableCharactersDirective,
   SkipWhitespaceDirective,
 } from '../../libs/directives';
+import { LoaderService } from '../../libs/services';
 import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
+import { LoaderNames } from '../../libs/types/loader-names.enum';
 import { IUserCredential } from './login.interface';
 @Component({
   selector: 'app-login',
@@ -46,6 +48,7 @@ export class LoginComponent {
   private router = inject(Router);
   private usersService = inject(UsersService);
   private authService = inject(AuthService);
+  private loaderService = inject(LoaderService);
   private translocoService = inject(TranslocoService);
   // 'en' | 'xh' = 'en'; // Need to create lang interface.
 
@@ -65,6 +68,10 @@ export class LoginComponent {
         userEmail: userEmail,
         password: password,
       };
+      this.loaderService.setLoader({
+        name: LoaderNames.global,
+        isLoading: true,
+      });
       try {
         const user = await lastValueFrom(
           this.usersService.getUserByCredential<IUsers>(userCredential)
@@ -79,6 +86,10 @@ export class LoginComponent {
         // eslint-disable-next-line no-console
         console.log(error);
       }
+      this.loaderService.setLoader({
+        name: LoaderNames.global,
+        isLoading: false,
+      });
     }
   }
 

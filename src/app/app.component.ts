@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { MatButton } from '@angular/material/button';
 import {
   ActivatedRoute,
   Event,
@@ -8,17 +7,20 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { LoaderDirective } from '../libs/directives';
+import { LoaderNames } from '../libs/types/loader-names.enum';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatButton, NavBarComponent],
+  imports: [RouterOutlet, LoaderDirective, NavBarComponent],
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnDestroy {
   public isShowNavBar = false;
+  protected readonly loaderNames = LoaderNames;
   private destroy$ = new Subject<void>();
   constructor(private router: Router, private route: ActivatedRoute) {
     router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
