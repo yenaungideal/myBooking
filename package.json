@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "npm-run-all -p start:server start:client",
-    "start:client": "ng serve",
+    "start:client": "ng serve --no-hmr",
     "start:server": "node server.ts",
     "update:ng": "npx ng update @angular/cli @angular/core",
     "build": "ng build",
