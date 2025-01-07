@@ -21,5 +21,5 @@ app.get('/booking', (req, res) => res.send(require(mockFilePath)('booking')));
 app.post('/booking', (req, res) =>
   setTimeout(() => {
     res.send(require(mockFilePath)('booking'));
-  }, 1000)
+  }, 5000)
 );
