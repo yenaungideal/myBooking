@@ -27,6 +27,7 @@
     "@jsverse/transloco": "^7.5.0",
     "@tanstack/angular-query-experimental": "^5.51.3",
     "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "express": "^4.19.2",
     "node": "^20.16.0",
     "rxjs": "~7.8.0",
