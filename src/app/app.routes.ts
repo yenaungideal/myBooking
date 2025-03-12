@@ -1,27 +1,31 @@
 import { Routes } from '@angular/router';
-import { authGuard, authorGuard } from '../libs/gurad';
-import { BookingComponent } from './booking/booking.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './login/login.component';
-import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // redirect to `first-component`
-  { path: 'login', title: 'Login', component: LoginComponent },
-  { path: 'dashboard', title: 'Dashboard', component: DashboardComponent },
+  {
+    path: 'login',
+    title: 'Login',
+    loadChildren: () =>
+      import('./login/login.route').then((r) => r.loginRoutes),
+  },
+  {
+    path: 'dashboard',
+    title: 'Dashboard',
+    loadChildren: () =>
+      import('./dashboard/dashboard.route').then((r) => r.dashboardRoutes),
+  },
   {
     path: 'booking',
     title: 'Booking',
-    component: BookingComponent,
-    canActivate: [authGuard, authorGuard],
-    // canDeactivate: [unsavedModalGuard],
+    loadChildren: () =>
+      import('./booking/booking.route').then((r) => r.bookingRoutes),
   },
   {
     path: 'profile',
     title: 'Profile',
-    component: ProfileComponent,
-    canActivate: [authGuard, authorGuard],
+    loadChildren: () =>
+      import('./profile/profile.route').then((r) => r.profileRoutes),
   },
   { path: 'logout', redirectTo: '/login' },
-  { path: '**', component: DashboardComponent }, // Wildcard route for a 404 page
+  { path: '**', redirectTo: '/dashboard' }, // Wildcard route for a 404 page
 ];
