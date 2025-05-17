@@ -1,0 +1,33 @@
+<div class="w-full px-[10%] py-[20px] bg-[#0F001C]">
+  <div class="template_wrapper relative w-full overflow-hidden">
+    <!-- Left Button -->
+    <button
+      class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
+      onclick="scrollCarouselLeft()"
+    >
+      &lt;
+    </button>
+  
+    <!-- Image Container -->
+    <div
+      id="imageCarousel"
+      class="flex gap-4 overflow-x-auto scroll-smooth w-full px-8"
+    >
+    @for (productCard of productCards(); track $index) {
+      <img
+    class="w-[300px] h-auto rounded bg-[#200A2B]"
+    [src]="productCard.src"
+    [alt]="productCard.alt"
+    />
+    } 
+    </div>
+  
+    <!-- Right Button -->
+    <button
+      class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
+      onclick="scrollCarouselRight()"
+    >
+      &gt;
+    </button>
+  </div>
+</div>
