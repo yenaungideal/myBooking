@@ -12,4 +12,15 @@
 <body class="mat-typography">
   <app-root></app-root>
 </body>
+<script>
+  function scrollCarouselLeft() {
+    const carousel = document.getElementById("imageCarousel");
+    carousel.scrollBy({ left: -300, behavior: "smooth" });
+  }
+
+  function scrollCarouselRight() {
+    const carousel = document.getElementById("imageCarousel");
+    carousel.scrollBy({ left: 300, behavior: "smooth" });
+  }
+</script>
 </html>
