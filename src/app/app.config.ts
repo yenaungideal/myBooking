@@ -11,6 +11,10 @@ import {
   withJsonpSupport,
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {
+  provideTanStackQuery,
+  QueryClient,
+} from '@tanstack/angular-query-experimental';
 import { environment } from '../environments';
 import { httpInterceptorProviders } from '../libs/interceptors';
 import { translationProvider } from '../libs/translation';
@@ -28,16 +32,16 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     translationProvider(),
     httpInterceptorProviders,
-    // provideTanStackQuery(
-    //   new QueryClient({
-    //     defaultOptions: {
-    //       queries: {
-    //         staleTime: 10 * (60 * 1000), // 10 mins
-    //         gcTime: 15 * (60 * 1000), // 15 mins
-    //       },
-    //     },
-    //   })
-    // ),
+    provideTanStackQuery(
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 10 * (60 * 1000), // 10 mins
+            gcTime: 15 * (60 * 1000), // 15 mins
+          },
+        },
+      })
+    ),
     { provide: 'ENVIRONMENT', useValue: environment },
   ],
 };

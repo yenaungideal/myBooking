@@ -9,15 +9,15 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Env } from '../../environments';
-import { ApiService } from '../../libs/services';
-import { SHOW_UNIVERSAL_LOADER } from '../../libs/types';
+import { ApiCacheService, ApiService } from '../../libs/services';
+import { ApiQueryResult, SHOW_UNIVERSAL_LOADER } from '../../libs/types';
 import { IBooking } from './booking.interface';
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {
   public currentBooking = computed(() => this.state());
   protected state = signal<IBooking | undefined>(undefined);
-  // private readonly apiCacheService = inject(ApiCacheService);
+  private readonly apiCacheService = inject(ApiCacheService);
   private readonly apiService = inject(ApiService);
   private readonly injector = inject(Injector);
 
@@ -31,13 +31,13 @@ export class BookingService {
     this.state.set(booking);
   }
 
-  // public getBooking(): ApiQueryResult<unknown> {
-  //   const url = `${this.ENVIRONMENT.API_URL}/booking`;
-  //   const queryKeys = ['booking', 'list'];
-  //   return this.apiCacheService.getQuery(url, queryKeys, this.injector, {
-  //     context: new HttpContext().set(SHOW_UNIVERSAL_LOADER, true),
-  //   });
-  // }
+  public getBooking(): ApiQueryResult<unknown> {
+    const url = `${this.ENVIRONMENT.API_URL}/booking`;
+    const queryKeys = ['booking', 'list'];
+    return this.apiCacheService.getQuery(url, queryKeys, this.injector, {
+      context: new HttpContext().set(SHOW_UNIVERSAL_LOADER, true),
+    });
+  }
 
   public getBookingById<T>(id: any): Observable<T> {
     const payload = id;
