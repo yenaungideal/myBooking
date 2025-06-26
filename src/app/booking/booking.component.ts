@@ -33,7 +33,8 @@ export class BookingComponent {
 
   private bookingService = inject(BookingService);
   private bookingQueryData = computed(async () => {
-    return (await this.bookingService.getBooking().data()) as IBooking[];
+    // return (await this.bookingService.getBooking().data()) as IBooking[];
+    return [] as IBooking[];
   });
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
