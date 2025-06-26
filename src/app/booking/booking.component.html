@@ -1,33 +1,33 @@
 <div class="mx-6 my-6">
-  <section class="example-container mat-elevation-z8" tabindex="0">
-    <table mat-table [dataSource]="bookingsS()">
-      <ng-container matColumnDef="id" sticky>
-        <th *matHeaderCellDef mat-header-cell>Booking Id</th>
-        <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
-      </ng-container>
+    <section class="example-container mat-elevation-z8" tabindex="0">
+        <table mat-table [dataSource]="bookingsS()??[]">
+            <ng-container matColumnDef="id" sticky>
+                <th *matHeaderCellDef mat-header-cell>Booking Id</th>
+                <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
+            </ng-container>
 
-      <ng-container matColumnDef="type">
-        <th *matHeaderCellDef mat-header-cell>Type</th>
-        <td *matCellDef="let element" mat-cell>{{ element.type }}</td>
-      </ng-container>
+            <ng-container matColumnDef="type">
+                <th *matHeaderCellDef mat-header-cell>Type</th>
+                <td *matCellDef="let element" mat-cell>{{ element.type }}</td>
+            </ng-container>
 
-      <ng-container matColumnDef="bookingDate">
-        <th *matHeaderCellDef mat-header-cell>Booking Date</th>
-        <td *matCellDef="let element" mat-cell>{{ element.bookingDate }}</td>
-      </ng-container>
+            <ng-container matColumnDef="bookingDate">
+                <th *matHeaderCellDef mat-header-cell>Booking Date</th>
+                <td *matCellDef="let element" mat-cell>{{ element.bookingDate }}</td>
+            </ng-container>
 
-      <ng-container matColumnDef="mobileNumber">
-        <th *matHeaderCellDef mat-header-cell>Mobile</th>
-        <td *matCellDef="let element" mat-cell>{{ element.mobileNumber }}</td>
-      </ng-container>
+            <ng-container matColumnDef="mobileNumber">
+                <th *matHeaderCellDef mat-header-cell>Mobile</th>
+                <td *matCellDef="let element" mat-cell>{{ element.mobileNumber }}</td>
+            </ng-container>
 
-      <ng-container matColumnDef="time">
-        <th *matHeaderCellDef mat-header-cell>Time</th>
-        <td *matCellDef="let element" mat-cell>{{ element.time }}</td>
-      </ng-container>
+            <ng-container matColumnDef="time">
+                <th *matHeaderCellDef mat-header-cell>Time</th>
+                <td *matCellDef="let element" mat-cell>{{ element.time }}</td>
+            </ng-container>
 
-      <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
-      <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
-    </table>
-  </section>
+            <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+        </table>
+    </section>
 </div>

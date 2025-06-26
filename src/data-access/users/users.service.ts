@@ -1,3 +1,4 @@
+import { HttpContext } from '@angular/common/http';
 import {
   Inject,
   Injectable,
@@ -6,12 +7,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { IUsers } from './users.interface';
-import { ApiQueryResult, SHOW_UNIVERSAL_LOADER } from '../../libs/types';
-import { Env } from '../../environments';
-import { ApiCacheService, ApiService } from '../../libs/services';
-import { HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Env } from '../../environments';
+import { ApiService } from '../../libs/services';
+import { ApiCacheService } from '../../libs/services/api-cache.service';
+import { ApiQueryResult, SHOW_UNIVERSAL_LOADER } from '../../libs/types';
+import { IUsers } from './users.interface';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {

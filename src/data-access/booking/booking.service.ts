@@ -1,3 +1,4 @@
+import { HttpContext } from '@angular/common/http';
 import {
   Inject,
   Injectable,
@@ -6,12 +7,11 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { IBooking } from './booking.interface';
-import { ApiQueryResult, SHOW_UNIVERSAL_LOADER } from '../../libs/types';
+import { Observable } from 'rxjs';
 import { Env } from '../../environments';
 import { ApiCacheService, ApiService } from '../../libs/services';
-import { HttpContext } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { ApiQueryResult, SHOW_UNIVERSAL_LOADER } from '../../libs/types';
+import { IBooking } from './booking.interface';
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {

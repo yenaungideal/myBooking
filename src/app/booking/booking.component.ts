@@ -1,13 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  computed,
-  effect,
-  Inject,
-  inject,
-  signal,
-  untracked,
-} from '@angular/core';
+import { Component, computed, Inject, inject, resource } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { IBooking } from '../../data-access/booking/booking.interface';
 import { BookingService } from '../../data-access/booking/booking.service';
@@ -29,21 +21,15 @@ export class BookingComponent {
     'time',
   ];
 
-  public bookingsS = signal<IBooking[]>([]);
+  public bookingsS = computed(() => this.bookingResource.value());
 
   private bookingService = inject(BookingService);
-  private bookingQueryData = computed(async () => {
-    return (await this.bookingService.getBooking().data()) as IBooking[];
+  private bookingResource = resource({
+    loader: async () => {
+      const bookingQueryData = await this.bookingService.getBooking().data();
+      return bookingQueryData as IBooking[];
+    },
   });
 
-  public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
-    effect(async () => {
-      const bookingQueryData = await this.bookingQueryData();
-      untracked(() => {
-        if (bookingQueryData) {
-          this.bookingsS.set(bookingQueryData);
-        }
-      });
-    });
-  }
+  public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {}
 }

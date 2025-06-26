@@ -2,12 +2,11 @@ import { Component, Inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Env } from '../../environments';
 import { PermissionsService } from '../../libs/permission-checkers/permissions.service';
-import { TranslateDirective } from '../../libs/translation';
 
 @Component({
   selector: 'app-notification-bar',
   standalone: true,
-  imports: [RouterModule, TranslateDirective],
+  imports: [RouterModule],
   templateUrl: './notification-bar.component.html',
   styleUrl: './notification-bar.component.scss',
 })

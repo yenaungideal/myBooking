@@ -1,13 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable, Injector, inject } from '@angular/core';
 import {
-  ApiInfiniteData,
-  ApiInfiniteQueryResult,
-  ApiQueryResult,
-  IApiPageParam,
-  IApiTableData,
-} from './../types/index';
-import {
   CreateInfiniteQueryResult,
   InfiniteData,
   QueryClient,
@@ -19,6 +12,13 @@ import {
 } from '@tanstack/angular-query-experimental';
 import { Observable, fromEvent, lastValueFrom, takeUntil } from 'rxjs';
 import { ApiService } from '.';
+import {
+  ApiInfiniteData,
+  ApiInfiniteQueryResult,
+  ApiQueryResult,
+  IApiPageParam,
+  IApiTableData,
+} from './../types/index';
 import { HttpOptions } from './http-options';
 
 @Injectable({ providedIn: 'root' })
@@ -42,7 +42,7 @@ export class ApiCacheService {
           );
         },
       }),
-      injector
+      { injector: injector }
     );
   }
 
@@ -104,7 +104,7 @@ export class ApiCacheService {
           );
         },
       }),
-      injector
+      { injector: injector }
     );
   }
 
@@ -227,7 +227,9 @@ export class ApiCacheService {
     pageParam: IApiPageParam,
     queryKey: readonly unknown[],
     injector: Injector
-  ): CreateInfiniteQueryResult<InfiniteData<IApiTableData<T>, number>, Error> {
+  ):
+    | any
+    | CreateInfiniteQueryResult<InfiniteData<IApiTableData<T>, number>, Error> {
     return injectInfiniteQuery(
       () => ({
         queryKey: queryKey,
@@ -245,12 +247,13 @@ export class ApiCacheService {
           );
         },
         initialPageParam: pageParam.startPage,
-        getNextPageParam: (page) =>
+        getNextPageParam: (page: any) =>
           page.number + 1 < page.totalPages ? page.number + 1 : undefined,
         getPreviousPageParam: (page) =>
           page.number > pageParam.startPage ? page.number - 1 : undefined,
+        initialData: undefined, // Add initialData as required
       }),
-      injector
+      { injector } // Pass injector as part of InjectInfiniteQueryOptions
     );
   }
 
@@ -312,22 +315,41 @@ export class ApiCacheService {
     successCallback = this.defaultSuccessCallback
   ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const mutation = injectMutation((client): any => {
-        return {
-          mutationFn: (data: D) => lastValueFrom(api),
-          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-          onError: (error: Error) => {
-            reject(error);
-          },
-          //successCallback.bind(this, client, queryKeys, injector)
-          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-          onSuccess: (data: D) => {
-            successCallback(client, queryKeys, refetchType, data);
+      interface MutationOptions<T, D> {
+        mutationFn: (data: D) => Promise<T>;
+        onError: (error: Error) => void;
+        onSuccess: (data: T) => void;
+      }
 
-            resolve(data as any);
-          },
-        };
-      }, injector);
+      interface MutationFn<T, D> {
+        (data: D): Promise<T>;
+      }
+
+      interface MutationCallbacks<T> {
+        onError: (error: Error) => void;
+        onSuccess: (data: T) => void;
+      }
+
+      interface MutationOptions<T, D> extends MutationCallbacks<T> {
+        mutationFn: MutationFn<T, D>;
+      }
+
+      const mutation = injectMutation(
+        (): MutationOptions<T, D> => {
+          return {
+            mutationFn: (data: D): Promise<T> => lastValueFrom(api),
+            onError: (error: Error): void => {
+              reject(error);
+            },
+            onSuccess: (data: T): void => {
+              const queryClient = injectQueryClient({ injector });
+              successCallback(queryClient, queryKeys, refetchType, data);
+              resolve(data as T);
+            },
+          };
+        },
+        { injector }
+      );
 
       mutation.mutate(data as any);
     });
