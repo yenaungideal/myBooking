@@ -10,10 +10,16 @@ import { Subject, takeUntil } from 'rxjs';
 import { LoaderDirective } from '../libs/directives';
 import { LoaderNames } from '../libs/types/loader-names.enum';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { NotificationBarComponent } from './notification-bar/notification-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoaderDirective, NavBarComponent],
+  imports: [
+    RouterOutlet,
+    LoaderDirective,
+    NavBarComponent,
+    NotificationBarComponent,
+  ],
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

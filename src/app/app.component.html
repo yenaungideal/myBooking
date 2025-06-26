@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+
+<body>
+
     @if(isShowNavBar){
+    <app-notification-bar></app-notification-bar>
     <app-nav-bar></app-nav-bar>
     }
     <router-outlet></router-outlet>
-  </body>
+</body>
+
 </html>
 <div class="absolute top-1/2 left-1/2">
-  <span class="block relative h-20 -top-10 w-20 -left-10" [loader]="loaderNames.global"></span>
+    <span class="block relative h-20 -top-10 w-20 -left-10" [loader]="loaderNames.global"></span>
 </div>
