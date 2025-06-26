@@ -2,13 +2,12 @@ import { Component, Inject, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Env } from '../../environments';
 import { PermissionsService } from '../../libs/permission-checkers/permissions.service';
-import { TranslateDirective } from '../../libs/translation';
 import { IProductCard } from './product-card.interface';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [RouterModule, TranslateDirective],
+  imports: [RouterModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
 })

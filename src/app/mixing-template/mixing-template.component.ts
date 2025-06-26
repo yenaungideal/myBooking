@@ -2,14 +2,13 @@ import { Component, Inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Env } from '../../environments';
 import { PermissionsService } from '../../libs/permission-checkers/permissions.service';
-import { TranslateDirective } from '../../libs/translation';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { IProductCard } from '../product-card/product-card.interface';
 
 @Component({
   selector: 'app-mixing-template',
   standalone: true,
-  imports: [RouterModule, ProductCardComponent, TranslateDirective],
+  imports: [RouterModule, ProductCardComponent],
   templateUrl: './mixing-template.component.html',
   styleUrl: './mixing-template.component.scss',
 })
