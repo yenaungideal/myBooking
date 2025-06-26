@@ -1,24 +1,20 @@
 import {
   ApplicationConfig,
-  provideExperimentalZonelessChangeDetection,
   enableProdMode,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { routes } from './app.routes';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { httpInterceptorProviders } from '../libs/interceptors';
-import { translationProvider } from '../libs/translation';
-import { environment } from '../environments';
-import {
-  provideAngularQuery,
-  QueryClient,
-} from '@tanstack/angular-query-experimental';
 import {
   provideHttpClient,
   withInterceptorsFromDi,
   withJsonpSupport,
 } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { environment } from '../environments';
+import { httpInterceptorProviders } from '../libs/interceptors';
+import { translationProvider } from '../libs/translation';
+import { routes } from './app.routes';
 
 if (environment.PRODUCTION) {
   enableProdMode();
@@ -26,22 +22,22 @@ if (environment.PRODUCTION) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(),
+    provideZonelessChangeDetection(),
     provideHttpClient(withInterceptorsFromDi(), withJsonpSupport()),
     provideRouter(routes),
     provideAnimationsAsync(),
     translationProvider(),
     httpInterceptorProviders,
-    provideAngularQuery(
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 10 * (60 * 1000), // 10 mins
-            gcTime: 15 * (60 * 1000), // 15 mins
-          },
-        },
-      })
-    ),
+    // provideTanStackQuery(
+    //   new QueryClient({
+    //     defaultOptions: {
+    //       queries: {
+    //         staleTime: 10 * (60 * 1000), // 10 mins
+    //         gcTime: 15 * (60 * 1000), // 15 mins
+    //       },
+    //     },
+    //   })
+    // ),
     { provide: 'ENVIRONMENT', useValue: environment },
   ],
 };
