@@ -21,11 +21,17 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>{{ "trxLogin.password" | trx }}</mat-label>
-        <input
+        <!-- <input
           type="password"
           matInput
           formControlName="password"
           [skipNonPrintableCharacters]="false"
+          [skipWhitespace]="false"
+        /> -->
+        <input
+          type="password"
+          matInput
+          formControlName="password"
           [skipWhitespace]="false"
         />
         @if (loginForm.controls['password'].hasError('password') &&
@@ -42,23 +48,27 @@
       </button>
     </form>
     <div class="w-full pt-2.5">
-      <span
-        class="cursor-pointer text-red-500 mr-1 px-1 py-1"
+      <button
+        type="button"
+        class="cursor-pointer text-red-500 mr-1 px-1 py-1 bg-transparent border-none"
         [ngClass]="{
           'border-solid border-2 border-gray-400 rounded':
             defaultLanguage() === 'en'
         }"
         (click)="setDefaultLanguage('en')"
-        >{{ "trxLogin.lang.english" | trx }}</span
-      >/<span
-        class="cursor-pointer text-blue-500 ml-1 px-1 py-1"
+      >
+        {{ "trxLogin.lang.english" | trx }}</button
+      >/<button
+        type="button"
+        class="cursor-pointer text-blue-500 ml-1 px-1 py-1 bg-transparent border-none"
         [ngClass]="{
           'border-solid border-2 border-gray-400 rounded':
             defaultLanguage() === 'zh'
         }"
         (click)="setDefaultLanguage('zh')"
-        >{{ "trxLogin.lang.chinese" | trx }}</span
       >
+        {{ "trxLogin.lang.chinese" | trx }}
+      </button>
     </div>
   </div>
 </div>

@@ -16,10 +16,7 @@ import { lastValueFrom } from 'rxjs';
 import { IUsers, UsersService } from '../../data-access';
 import { AuthService, AuthStateEnum } from '../../data-access/auth';
 import { Env } from '../../environments';
-import {
-  SkipNonPrintableCharactersDirective,
-  SkipWhitespaceDirective,
-} from '../../libs/directives';
+import { SkipWhitespaceDirective } from '../../libs/directives';
 import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
 import { IUserCredential } from './login.interface';
 @Component({
@@ -31,7 +28,6 @@ import { IUserCredential } from './login.interface';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    SkipNonPrintableCharactersDirective,
     SkipWhitespaceDirective,
     TranslatePipe,
   ],
