@@ -10,7 +10,7 @@ export class SkipNonPrintableCharactersDirective {
   public constructor(private element: ElementRef) {}
 
   @HostListener('input', ['$event'])
-  public logChange(event: KeyboardEvent): void {
+  public logChange(event: Event): void {
     if (!this.skipNonPrintableCharacters) return;
     const inputText = (event.target as HTMLInputElement).value;
     const regex = new RegExp(/[^\x20-\x7E]+/g, 'g');
