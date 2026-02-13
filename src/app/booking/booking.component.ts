@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, Inject, inject, resource } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { IBooking } from '../../data-access/booking/booking.interface';
@@ -7,7 +7,7 @@ import { Env } from '../../environments';
 
 @Component({
   selector: 'app-booking',
-  imports: [CommonModule, MatTableModule],
+  imports: [MatTableModule],
   standalone: true,
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',

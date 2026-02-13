@@ -20,11 +20,10 @@ export const compareStringArrays = (arrayOne: unknown[], arrayTwo: unknown[]): b
   };
   
   /** sortBy can sort by some prop in object, with lowerCasing and reversing of sorting */
-  export const sortBy = (prop: string, lowerCased = true, reversed = false) => {
+  export const sortBy = (prop: string, lowerCased = true, reversed = false): ((a: any, b: any) => number) => {
     const prepare = (v: string): string => (lowerCased && v && typeof v === 'string' ? v.toLowerCase() : v);
   
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return function (a: any, b: any) {
+    return function (a: any, b: any): number {
       if (prepare(a[prop]) < prepare(b[prop])) {
         return reversed ? 1 : -1;
       }
