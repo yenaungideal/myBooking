@@ -9,6 +9,12 @@ export const routes: Routes = [
       import('./login/login.route').then((r) => r.loginRoutes),
   },
   {
+    path: 'sign-up',
+    title: 'Sign Up',
+    loadChildren: () =>
+      import('./sign-up/sign-up.route').then((r) => r.signupRoutes),
+  },
+  {
     path: 'dashboard',
     title: 'Dashboard',
     loadChildren: () =>

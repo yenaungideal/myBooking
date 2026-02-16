@@ -13,7 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { lastValueFrom } from 'rxjs';
-import { IUsers, UsersService } from '../../data-access';
 import { AuthService, AuthStateEnum } from '../../data-access/auth';
 import { Env } from '../../environments';
 import {
@@ -21,9 +20,12 @@ import {
   SkipWhitespaceDirective,
 } from '../../libs/directives';
 import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
-import { IUserCredential } from './login.interface';
+import { passwordErrorsValidators } from '../../libs/validators/password-validator';
+import { matchPasswordValidator } from '../../libs/validators/password-validator/match-password.validator';
+import { ISignupRequest, ISignupResponse } from './sign-up.interface';
+
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   imports: [
     FormsModule,
     CommonModule,
@@ -37,44 +39,44 @@ import { IUserCredential } from './login.interface';
     TranslatePipe,
   ],
   standalone: true,
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './sign-up.component.html',
+  styleUrl: './sign-up.component.scss',
 })
-export class LoginComponent {
-  public loginForm: FormGroup;
+export class SignupComponent {
+  public signupForm: FormGroup;
   public defaultLanguage = signal<'en' | 'zh'>('en');
 
   private router = inject(Router);
-  private usersService = inject(UsersService);
   private authService = inject(AuthService);
   private translocoService = inject(TranslocoService);
-  // 'en' | 'xh' = 'en'; // Need to create lang interface.
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
-    this.loginForm = new FormGroup({
-      userEmail: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
+    this.signupForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', passwordErrorsValidators),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        matchPasswordValidator('password'),
+      ]),
     });
     this.setDefaultLanguage('en');
   }
 
   public async onSubmit(): Promise<void> {
-    if (this.loginForm.valid) {
-      const { userEmail, password } = this.loginForm.value;
-      // Handle login logic here
-      const userCredential: IUserCredential = {
-        userEmail: userEmail,
+    if (this.signupForm.valid) {
+      const { email, password } = this.signupForm.value;
+      const signupRequest: ISignupRequest = {
+        email: email,
         password: password,
       };
       try {
         const user = await lastValueFrom(
-          this.usersService.getUserByCredential<IUsers>(userCredential)
+          this.authService.registerUser<ISignupResponse>(signupRequest)
         );
 
         if (user) {
-          this.setLoggedInUserAuthState();
-          this.setCurrentUserState(user);
-          this.router.navigate(['dashboard']);
+          // Navigate to login page after successful signup
+          this.router.navigate(['login']);
         }
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -91,18 +93,5 @@ export class LoginComponent {
       this.translocoService.setActiveLang('en');
       this.defaultLanguage.set('en');
     }
-  }
-
-  private setLoggedInUserAuthState(): void {
-    const state = {
-      token: 123,
-      status: AuthStateEnum.SUCCESSED,
-      sessionExpiry: 123,
-    };
-    this.authService.setAuthState(state);
-  }
-
-  private setCurrentUserState(users: IUsers): void {
-    this.usersService.setCurrentUser(users);
   }
 }
