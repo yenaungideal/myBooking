@@ -63,7 +63,7 @@ export class ApiCacheService {
     );
   }
 
-  public postInfiniteQuery<T, D, G>(
+  public postInfiniteQuery<T, D, G = IApiTableData<T>>(
     url: string,
     data: D,
     pageParam: IApiPageParam,
@@ -113,26 +113,12 @@ export class ApiCacheService {
     data: D,
     queryKeys: QueryKey[],
     injector: Injector,
-    httpOptions: HttpOptions = {}
+    httpOptions: HttpOptions = {},
+    shouldStringify = true
   ): Promise<T> {
     return this.mutate(
       data,
-      this.http.post<T>(url, JSON.stringify(data), httpOptions),
-      queryKeys,
-      injector
-    );
-  }
-
-  public post2<T, D>(
-    url: string,
-    data: D,
-    queryKeys: QueryKey[],
-    injector: Injector,
-    httpOptions: HttpOptions = {}
-  ): Promise<T> {
-    return this.mutate(
-      data,
-      this.http.post2<T, D>(url, data, httpOptions),
+      this.http.post<T, D>(url, shouldStringify ? JSON.stringify(data) as D : data, httpOptions),
       queryKeys,
       injector
     );
@@ -142,34 +128,20 @@ export class ApiCacheService {
     url: string,
     data: D,
     queryKeys: QueryKey[],
-    injector?: Injector,
-    httpOptions: HttpOptions = {}
-  ): Promise<T> {
-    return this.mutate(
-      data,
-      this.http.put<T>(url, JSON.stringify(data), httpOptions),
-      queryKeys,
-      injector
-    );
-  }
-
-  public put2<T, D>(
-    url: string,
-    data: D,
-    queryKeys: QueryKey[],
     injector: Injector,
     httpOptions: HttpOptions = {},
-    refetchType = 'active' as any,
+    shouldStringify = true,
+    refetchType: 'active' | 'inactive' | 'all' | 'none' = 'active',
     successCallback?: (
       client: QueryClient,
       queryKeys: QueryKey[],
-      refetchType: any,
-      data: any
+      refetchType: 'active' | 'inactive' | 'all' | 'none',
+      data: T
     ) => void
   ): Promise<T> {
     return this.mutate(
       data,
-      this.http.put2<T, D>(url, data, httpOptions),
+      this.http.put<T, D>(url, shouldStringify ? JSON.stringify(data) as D : data, httpOptions),
       queryKeys,
       injector,
       refetchType,
@@ -177,22 +149,23 @@ export class ApiCacheService {
     );
   }
 
-  public patch<T>(
+  public patch<T, D>(
     url: string,
-    data: string,
+    data: D,
     queryKeys: QueryKey[],
     injector: Injector,
-    httpOptions: HttpOptions = {}
+    httpOptions: HttpOptions = {},
+    shouldStringify = true
   ): Promise<T> {
     return this.mutate(
       data,
-      this.http.patch<T>(url, data, httpOptions),
+      this.http.patch<T, D>(url, shouldStringify ? JSON.stringify(data) as D : data, httpOptions),
       queryKeys,
       injector
     );
   }
 
-  public patch2<T, D>(
+  public delete<T, D = unknown>(
     url: string,
     data: D,
     queryKeys: QueryKey[],
@@ -201,22 +174,7 @@ export class ApiCacheService {
   ): Promise<T> {
     return this.mutate(
       data,
-      this.http.patch2<T, D>(url, data, httpOptions),
-      queryKeys,
-      injector
-    );
-  }
-
-  public delete<T, D>(
-    url: string,
-    data: D,
-    queryKeys: QueryKey[],
-    injector: Injector,
-    httpOptions: HttpOptions = {}
-  ): Promise<T> {
-    return this.mutate(
-      data,
-      this.http.delete<T, D>(url, { ...httpOptions, body: data }),
+      this.http.delete<T>(url, { ...httpOptions, body: data }),
       queryKeys,
       injector
     );
@@ -294,11 +252,11 @@ export class ApiCacheService {
     return data as IApiTableData<T>;
   }
 
-  private defaultSuccessCallback(
+  private defaultSuccessCallback<T>(
     cl: QueryClient,
     queryKeys: QueryKey[],
-    refetchType: any,
-    data: any
+    refetchType: 'active' | 'inactive' | 'all' | 'none',
+    data: T
   ): void {
     queryKeys.forEach(
       async (queryKey: any) =>
@@ -311,8 +269,8 @@ export class ApiCacheService {
     api: Observable<T>,
     queryKeys: QueryKey[],
     injector?: Injector,
-    refetchType = 'active' as any,
-    successCallback = this.defaultSuccessCallback
+    refetchType: 'active' | 'inactive' | 'all' | 'none' = 'active',
+    successCallback = this.defaultSuccessCallback<T>
   ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       interface MutationOptions<T, D> {

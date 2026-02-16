@@ -21,15 +21,25 @@ export class AuthorizeRequestInterceptor extends BaseRequestInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     if (this.checkAllowedService(request.url)) {
-      if (!this.authService.isAuthenticated) throw 'Unauthorized request.';
-      return from(this.authService.getToken()).pipe(
-        switchMap((token) => {
+      if (!this.authService.isAuthenticated) {
+        throw new Error('Unauthorized request - user not authenticated.');
+      }
+
+      const token = this.authService.getToken();
+      if (!token) {
+        throw new Error('Unauthorized request - no authentication token available.');
+      }
+
+      return from(Promise.resolve(token)).pipe(
+        switchMap((authToken) => {
           const newReq = request.clone({
-            headers: request.headers.set('Authorization', `Bearer ${token}`),
+            headers: request.headers.set('Authorization', `Bearer ${authToken}`),
           });
           return next.handle(newReq);
         })
       );
-    } else return next.handle(request);
+    } else {
+      return next.handle(request);
+    }
   }
 }

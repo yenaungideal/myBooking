@@ -1,7 +1,5 @@
-import { Component, Inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Env } from '../../environments';
-import { PermissionsService } from '../../libs/permission-checkers/permissions.service';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { IProductCard } from '../product-card/product-card.interface';
 
@@ -11,11 +9,10 @@ import { IProductCard } from '../product-card/product-card.interface';
   imports: [RouterModule, ProductCardComponent],
   templateUrl: './mixing-template.component.html',
   styleUrl: './mixing-template.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MixingTemplateComponent {
-  isShowUserMenuButton = false;
-  isShowMobileMenuButton = false;
-  public productCards = signal<IProductCard[]>([
+  public readonly productCards = signal<IProductCard[]>([
     {
       src: 'https://www.iamkarra.com/cdn/shop/files/CUBASE_TEMPLATE_3D_1.png?v=1741883926&width=300',
       alt: 'CUBASE_TEMPLATE_3D_1',
@@ -41,9 +38,4 @@ export class MixingTemplateComponent {
       alt: 'logic_template',
     },
   ]);
-
-  public constructor(
-    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env,
-    private permissionsService: PermissionsService
-  ) {}
 }

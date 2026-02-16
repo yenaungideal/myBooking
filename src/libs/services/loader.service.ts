@@ -2,6 +2,10 @@ import { computed, Injectable, signal, untracked } from '@angular/core';
 import { LoaderNames } from '../types/loader-names.enum';
 import { ILoaderModel } from '../types/loader.model';
 
+/**
+ * Service for managing loading states across the application
+ * Uses Angular signals for reactive state management
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -9,8 +13,12 @@ export class LoaderService {
   public readonly loader = computed(() => this.currentLoader());
 
   private readonly currentLoader = signal<ILoaderModel | undefined>(undefined);
-  private loaderData = new Map<LoaderNames, ILoaderModel>();
+  private readonly loaderData = new Map<LoaderNames, ILoaderModel>();
 
+  /**
+   * Configure and activate/deactivate a loader
+   * @param config - Loader configuration including name, position, and loading state
+   */
   public setLoader(config: Partial<ILoaderModel>): void {
     config.name = config.name ?? LoaderNames.global;
     config.disableElement = config.disableElement ?? false;
@@ -38,6 +46,10 @@ export class LoaderService {
     }
   }
 
+  /**
+   * Reset a loader to its initial state
+   * @param name - Name of the loader to reset
+   */
   public resetLoader(name: LoaderNames): void {
     const loader = this.loaderData.get(name);
     if (loader && loader.isLoading) {
@@ -47,6 +59,11 @@ export class LoaderService {
     }
   }
 
+  /**
+   * Remove a loader from the registry
+   * @param name - Name of the loader to remove
+   * @returns true if the loader was removed, false otherwise
+   */
   public removeLoader(name: LoaderNames): boolean {
     this.resetLoader(name);
     return this.loaderData.delete(name);

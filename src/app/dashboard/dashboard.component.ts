@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MixingTemplateComponent } from '../mixing-template/mixing-template.component';
 import { SamplePackComponent } from '../sample-pack/sample-pack.component';
 
@@ -7,5 +7,6 @@ import { SamplePackComponent } from '../sample-pack/sample-pack.component';
   imports: [MixingTemplateComponent, SamplePackComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent {}
+export class DashboardComponent { }

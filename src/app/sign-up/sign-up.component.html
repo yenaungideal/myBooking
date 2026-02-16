@@ -1,6 +1,4 @@
-<div
-  class="min-h-screen flex items-center justify-center bg-gray-100 signup-background-image"
->
+<div class="min-h-screen flex items-center justify-center bg-gray-100 signup-background-image">
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md mx-5">
     <h2 class="text-2xl font-bold mb-6 text-center">
       {{ "trxSignup.title" | trx }}
@@ -8,12 +6,7 @@
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
       <mat-form-field class="w-full">
         <mat-label>{{ "trxSignup.email" | trx }}</mat-label>
-        <input
-          type="email"
-          matInput
-          formControlName="email"
-          placeholder="Ex. pat@example.com"
-        />
+        <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" />
         @if (signupForm.controls['email'].hasError('email') &&
         !signupForm.controls['email'].hasError('required')) {
         <mat-error>{{ "trxSignup.email.validator.invalid" | trx }}</mat-error>
@@ -24,54 +17,44 @@
 
       <mat-form-field class="w-full">
         <mat-label>{{ "trxSignup.password" | trx }}</mat-label>
-        <input
-          type="password"
-          matInput
-          formControlName="password"
-          [skipNonPrintableCharacters]="false"
-          [skipWhitespace]="false"
-        />
+        <input type="password" matInput formControlName="password" [skipNonPrintableCharacters]="false"
+          [skipWhitespace]="false" />
         @if (signupForm.controls['password'].hasError('specialChar')) {
         <mat-error>{{
           "trxSignup.password.validator.specialChar" | trx
-        }}</mat-error>
+          }}</mat-error>
         } @if (signupForm.controls['password'].hasError('specialCase')) {
         <mat-error>{{
           "trxSignup.password.validator.specialCase" | trx
-        }}</mat-error>
+          }}</mat-error>
         } @if (signupForm.controls['password'].hasError('combinedMinMax')) {
         <mat-error>{{
           "trxSignup.password.validator.minMax" | trx
-        }}</mat-error>
+          }}</mat-error>
         } @if (signupForm.controls['password'].hasError('oneNumber')) {
         <mat-error>{{
           "trxSignup.password.validator.oneNumber" | trx
-        }}</mat-error>
+          }}</mat-error>
         } @if (signupForm.controls['password'].hasError('required')) {
         <mat-error>{{
           "trxSignup.password.validator.required" | trx
-        }}</mat-error>
+          }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field class="w-full">
         <mat-label>{{ "trxSignup.confirmPassword" | trx }}</mat-label>
-        <input
-          type="password"
-          matInput
-          formControlName="confirmPassword"
-          [skipNonPrintableCharacters]="false"
-          [skipWhitespace]="false"
-        />
+        <input type="password" matInput formControlName="confirmPassword" [skipNonPrintableCharacters]="false"
+          [skipWhitespace]="false" />
         @if (signupForm.controls['confirmPassword'].hasError('passwordMismatch')
         && !signupForm.controls['confirmPassword'].hasError('required')) {
         <mat-error>{{
           "trxSignup.confirmPassword.validator.mismatch" | trx
-        }}</mat-error>
+          }}</mat-error>
         } @if (signupForm.controls['confirmPassword'].hasError('required')) {
         <mat-error>{{
           "trxSignup.confirmPassword.validator.required" | trx
-        }}</mat-error>
+          }}</mat-error>
         }
       </mat-form-field>
 
@@ -95,35 +78,22 @@
 
     <!-- Link to login page -->
     <div class="text-center mt-4">
-      <span class="text-sm text-gray-600"
-        >{{ "trxSignup.loginLink.text" | trx }}
+      <span class="text-sm text-gray-600">{{ "trxSignup.loginLink.text" | trx }}
       </span>
-      <a
-        routerLink="/login"
-        class="text-sm text-blue-600 hover:text-blue-800 ml-1 cursor-pointer"
-        >{{ "trxSignup.loginLink.link" | trx }}</a
-      >
+      <a routerLink="/login" class="text-sm text-blue-600 hover:text-blue-800 ml-1 cursor-pointer">{{
+        "trxSignup.loginLink.link" | trx }}</a>
     </div>
 
     <!-- Language switcher -->
     <div class="w-full pt-2.5">
-      <span
-        class="cursor-pointer text-red-500 mr-1 px-1 py-1"
-        [ngClass]="{
+      <span class="cursor-pointer text-red-500 mr-1 px-1 py-1" [ngClass]="{
           'border-solid border-2 border-gray-400 rounded':
-            defaultLanguage() === 'en'
-        }"
-        (click)="setDefaultLanguage('en')"
-        >{{ "trxSignup.lang.english" | trx }}</span
-      >/<span
-        class="cursor-pointer text-blue-500 ml-1 px-1 py-1"
-        [ngClass]="{
+            currentLanguage === 'en'
+        }" (click)="setLanguage('en')">{{ "trxSignup.lang.english" | trx }}</span>/<span
+        class="cursor-pointer text-blue-500 ml-1 px-1 py-1" [ngClass]="{
           'border-solid border-2 border-gray-400 rounded':
-            defaultLanguage() === 'zh'
-        }"
-        (click)="setDefaultLanguage('zh')"
-        >{{ "trxSignup.lang.chinese" | trx }}</span
-      >
+            currentLanguage === 'zh'
+        }" (click)="setLanguage('zh')">{{ "trxSignup.lang.chinese" | trx }}</span>
     </div>
   </div>
 </div>

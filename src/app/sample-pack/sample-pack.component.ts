@@ -1,7 +1,5 @@
-import { Component, Inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Env } from '../../environments';
-import { PermissionsService } from '../../libs/permission-checkers/permissions.service';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { IProductCard } from '../product-card/product-card.interface';
 
@@ -11,11 +9,10 @@ import { IProductCard } from '../product-card/product-card.interface';
   imports: [RouterModule, ProductCardComponent],
   templateUrl: './sample-pack.component.html',
   styleUrl: './sample-pack.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SamplePackComponent {
-  isShowUserMenuButton = false;
-  isShowMobileMenuButton = false;
-  public productCards = signal<IProductCard[]>([
+  public readonly productCards = signal<IProductCard[]>([
     {
       src: 'https://www.iamkarra.com/cdn/shop/files/KARRAVOCALS13D1.png?v=1741890871&width=1200',
       alt: 'KARRAVOCALS13D1',
@@ -29,9 +26,4 @@ export class SamplePackComponent {
       alt: 'EASYBUNDLE3D',
     },
   ]);
-
-  public constructor(
-    @Inject('ENVIRONMENT') protected ENVIRONMENT: Env,
-    private permissionsService: PermissionsService
-  ) {}
 }

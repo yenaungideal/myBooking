@@ -1,5 +1,12 @@
 
-import { Component, computed, Inject, inject, resource } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  Inject,
+  inject,
+  resource,
+} from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { IBooking } from '../../data-access/booking/booking.interface';
 import { BookingService } from '../../data-access/booking/booking.service';
@@ -11,9 +18,10 @@ import { Env } from '../../environments';
   standalone: true,
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingComponent {
-  public displayedColumns = [
+  public readonly displayedColumns = [
     'id',
     'type',
     'bookingDate',
@@ -21,15 +29,15 @@ export class BookingComponent {
     'time',
   ];
 
-  public bookingsS = computed(() => this.bookingResource.value());
+  public readonly bookingsS = computed(() => this.bookingResource.value());
 
-  private bookingService = inject(BookingService);
-  private bookingResource = resource({
+  private readonly bookingService = inject(BookingService);
+  private readonly bookingResource = resource({
     loader: async () => {
       const bookingQueryData = await this.bookingService.getBooking().data();
       return bookingQueryData as IBooking[];
     },
   });
 
-  public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {}
+  public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) { }
 }

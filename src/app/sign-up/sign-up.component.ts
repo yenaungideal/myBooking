@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,15 +17,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
 import { lastValueFrom } from 'rxjs';
-import { AuthService, AuthStateEnum } from '../../data-access/auth';
+import { AuthService } from '../../data-access/auth';
 import { Env } from '../../environments';
 import {
   SkipNonPrintableCharactersDirective,
   SkipWhitespaceDirective,
 } from '../../libs/directives';
-import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
+import { LanguageService, SupportedLanguage } from '../../libs/services';
+import { TranslatePipe } from '../../libs/translation';
 import { passwordErrorsValidators } from '../../libs/validators/password-validator';
 import { matchPasswordValidator } from '../../libs/validators/password-validator/match-password.validator';
 import { ISignupRequest, ISignupResponse } from './sign-up.interface';
@@ -41,14 +47,16 @@ import { ISignupRequest, ISignupResponse } from './sign-up.interface';
   standalone: true,
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignupComponent {
-  public signupForm: FormGroup;
-  public defaultLanguage = signal<'en' | 'zh'>('en');
+  public readonly signupForm: FormGroup;
+  public readonly errorMessage = signal<string | null>(null);
+  public readonly isSubmitting = signal<boolean>(false);
 
-  private router = inject(Router);
-  private authService = inject(AuthService);
-  private translocoService = inject(TranslocoService);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly languageService = inject(LanguageService);
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
     this.signupForm = new FormGroup({
@@ -59,39 +67,46 @@ export class SignupComponent {
         matchPasswordValidator('password'),
       ]),
     });
-    this.setDefaultLanguage('en');
   }
 
   public async onSubmit(): Promise<void> {
-    if (this.signupForm.valid) {
+    if (this.signupForm.invalid || this.isSubmitting()) {
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
+
+    try {
       const { email, password } = this.signupForm.value;
       const signupRequest: ISignupRequest = {
-        email: email,
-        password: password,
+        email,
+        password,
       };
-      try {
-        const user = await lastValueFrom(
-          this.authService.registerUser<ISignupResponse>(signupRequest)
-        );
 
-        if (user) {
-          // Navigate to login page after successful signup
-          this.router.navigate(['login']);
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
+      const user = await lastValueFrom(
+        this.authService.registerUser<ISignupResponse>(signupRequest)
+      );
+
+      if (user) {
+        // Navigate to login page after successful signup
+        await this.router.navigate(['login']);
+      } else {
+        this.errorMessage.set('Registration failed. Please try again.');
       }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred during registration.';
+      this.errorMessage.set(message);
+    } finally {
+      this.isSubmitting.set(false);
     }
   }
 
-  public setDefaultLanguage(lang: 'en' | 'zh'): void {
-    if (TRANSL_LANGS.includes(lang)) {
-      this.translocoService.setActiveLang(lang);
-      this.defaultLanguage.set(lang);
-    } else {
-      this.translocoService.setActiveLang('en');
-      this.defaultLanguage.set('en');
-    }
+  public setLanguage(lang: SupportedLanguage): void {
+    this.languageService.setLanguage(lang);
+  }
+
+  public get currentLanguage(): SupportedLanguage {
+    return this.languageService.currentLanguage();
   }
 }

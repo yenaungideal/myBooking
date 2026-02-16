@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,7 +17,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
 import { lastValueFrom } from 'rxjs';
 import { IUsers, UsersService } from '../../data-access';
 import { AuthService, AuthStateEnum } from '../../data-access/auth';
@@ -20,8 +25,10 @@ import {
   SkipNonPrintableCharactersDirective,
   SkipWhitespaceDirective,
 } from '../../libs/directives';
-import { TRANSL_LANGS, TranslatePipe } from '../../libs/translation';
+import { LanguageService, SupportedLanguage } from '../../libs/services';
+import { TranslatePipe } from '../../libs/translation';
 import { IUserCredential } from './login.interface';
+
 @Component({
   selector: 'app-login',
   imports: [
@@ -39,58 +46,65 @@ import { IUserCredential } from './login.interface';
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  public loginForm: FormGroup;
-  public defaultLanguage = signal<'en' | 'zh'>('en');
+  public readonly loginForm: FormGroup;
+  public readonly errorMessage = signal<string | null>(null);
+  public readonly isSubmitting = signal<boolean>(false);
 
-  private router = inject(Router);
-  private usersService = inject(UsersService);
-  private authService = inject(AuthService);
-  private translocoService = inject(TranslocoService);
-  // 'en' | 'xh' = 'en'; // Need to create lang interface.
+  private readonly router = inject(Router);
+  private readonly usersService = inject(UsersService);
+  private readonly authService = inject(AuthService);
+  private readonly languageService = inject(LanguageService);
 
   public constructor(@Inject('ENVIRONMENT') protected ENVIRONMENT: Env) {
     this.loginForm = new FormGroup({
       userEmail: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
-    this.setDefaultLanguage('en');
   }
 
   public async onSubmit(): Promise<void> {
-    if (this.loginForm.valid) {
-      const { userEmail, password } = this.loginForm.value;
-      // Handle login logic here
-      const userCredential: IUserCredential = {
-        userEmail: userEmail,
-        password: password,
-      };
-      try {
-        const user = await lastValueFrom(
-          this.usersService.getUserByCredential<IUsers>(userCredential)
-        );
+    if (this.loginForm.invalid || this.isSubmitting()) {
+      return;
+    }
 
-        if (user) {
-          this.setLoggedInUserAuthState();
-          this.setCurrentUserState(user);
-          this.router.navigate(['dashboard']);
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
+
+    try {
+      const { userEmail, password } = this.loginForm.value;
+      const userCredential: IUserCredential = {
+        userEmail,
+        password,
+      };
+
+      const user = await lastValueFrom(
+        this.usersService.getUserByCredential<IUsers>(userCredential)
+      );
+
+      if (user) {
+        this.setLoggedInUserAuthState();
+        this.setCurrentUserState(user);
+        await this.router.navigate(['dashboard']);
+      } else {
+        this.errorMessage.set('Invalid credentials. Please try again.');
       }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected error occurred during login.';
+      this.errorMessage.set(message);
+    } finally {
+      this.isSubmitting.set(false);
     }
   }
 
-  public setDefaultLanguage(lang: 'en' | 'zh'): void {
-    if (TRANSL_LANGS.includes(lang)) {
-      this.translocoService.setActiveLang(lang);
-      this.defaultLanguage.set(lang);
-    } else {
-      this.translocoService.setActiveLang('en');
-      this.defaultLanguage.set('en');
-    }
+  public setLanguage(lang: SupportedLanguage): void {
+    this.languageService.setLanguage(lang);
+  }
+
+  public get currentLanguage(): SupportedLanguage {
+    return this.languageService.currentLanguage();
   }
 
   private setLoggedInUserAuthState(): void {
